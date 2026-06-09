@@ -42,7 +42,7 @@ function init() {
   applyTextBtn.addEventListener("click", () => {
     const parsed = parseSignalText(signalText.value);
     if (parsed.length !== cycleCount) {
-      showError(`請輸入剛好 ${cycleCount} 個數值。目前讀到 ${parsed.length} 個。`);
+      showError(`請輸?��?�?${cycleCount} ?�數?�。目?��???${parsed.length} ?�。`);
       return;
     }
     setSignals(parsed);
@@ -56,7 +56,7 @@ function init() {
     drawEmptyChart();
     setResults(null);
     fitDetails.classList.remove("error");
-    fitDetails.innerHTML = "<p>產生 demo 或輸入 40 點數值後開始計算。</p>";
+    fitDetails.innerHTML = "<p>?��? demo ?�輸??40 點數?��??��?計�???/p>";
   });
 
   chartTabs.forEach((tab) => {
@@ -68,7 +68,7 @@ function init() {
   });
   copyJsonBtn.addEventListener("click", async () => {
     await navigator.clipboard.writeText(instrumentOutput.textContent);
-    copyJsonBtn.textContent = "已複製";
+    copyJsonBtn.textContent = "已�?�?;
     setTimeout(() => {
       copyJsonBtn.textContent = "複製";
     }, 1200);
@@ -158,7 +158,7 @@ async function calculateAndRender(updateTextarea = true) {
   // Core fitting and QC are calculated by Django/Python; JS renders the response.
   const signals = readSignals();
   if (!signals) {
-    showError("每一點都需要是 0-100 的數值。");
+    showError("每�?點都?�要是 0-100 ?�數?��?);
     return;
   }
   if (updateTextarea) syncTextareaFromInputs();
@@ -173,7 +173,7 @@ async function calculateAndRender(updateTextarea = true) {
     renderQc(result.qc);
     renderInstrumentOutput(result);
   } catch (error) {
-    showError(error.message || "後端演算法計算失敗。");
+    showError(error.message || "後端演�?法�?算失?��?);
   }
 }
 
@@ -206,7 +206,7 @@ function drawChart(signals, fit) {
   const height = cssHeight - padding.top - padding.bottom;
 
   ctx.clearRect(0, 0, cssWidth, cssHeight);
-  ctx.fillStyle = "#fbfdff";
+  ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, cssWidth, cssHeight);
 
   if (chartMode === "residual") {
@@ -272,7 +272,7 @@ function drawGrid(padding, width, height, cssWidth, cssHeight, maxY = 110) {
 }
 
 function drawFitLine(fit, xScale, yScale) {
-  ctx.strokeStyle = "#0f766e";
+  ctx.strokeStyle = "#38bdf8";
   ctx.lineWidth = 3;
   ctx.beginPath();
   for (let index = 0; index <= 390; index += 1) {
@@ -286,7 +286,7 @@ function drawFitLine(fit, xScale, yScale) {
 }
 
 function drawPoints(signals, xScale, yScale) {
-  ctx.fillStyle = "#2563eb";
+  ctx.fillStyle = "#0ea5e9";
   ctx.strokeStyle = "#ffffff";
   ctx.lineWidth = 1.5;
   signals.forEach((value, index) => {
@@ -303,7 +303,7 @@ function drawCqLine(fit, xScale, yScale, padding) {
   if (Number.isFinite(fit.cq) && fit.cq >= 1 && fit.cq <= 40) {
     const x = xScale(fit.cq);
     const cqY = yScale(sigmoid(fit.cq, fit));
-    ctx.strokeStyle = "#b42318";
+    ctx.strokeStyle = "#fb7185";
     ctx.setLineDash([4, 4]);
     ctx.beginPath();
     ctx.moveTo(x, padding.top);
@@ -311,7 +311,7 @@ function drawCqLine(fit, xScale, yScale, padding) {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    ctx.fillStyle = "#b42318";
+    ctx.fillStyle = "#fb7185";
     ctx.font = "bold 12px Segoe UI, Arial";
     ctx.textAlign = "left";
     ctx.textBaseline = "bottom";
@@ -333,10 +333,10 @@ function drawAxisLabels(padding, width, height, cssWidth, cssHeight, yLabel = "F
   ctx.restore();
 
   ctx.textAlign = "right";
-  ctx.fillStyle = "#0f766e";
-  ctx.fillText("擬合線", cssWidth - padding.right, padding.top + 18);
-  ctx.fillStyle = "#2563eb";
-  ctx.fillText("原始訊號", cssWidth - padding.right, padding.top + 38);
+  ctx.fillStyle = "#38bdf8";
+  ctx.fillText("?��?�?, cssWidth - padding.right, padding.top + 18);
+  ctx.fillStyle = "#0ea5e9";
+  ctx.fillText("?��?訊�?", cssWidth - padding.right, padding.top + 38);
 }
 
 function setResults(result) {
@@ -357,14 +357,8 @@ function showFitDetails(result) {
   fitDetails.classList.remove("error");
   fitDetails.innerHTML = `
     <p>
-      4PL sigmoid：<strong>Bottom ${formatNumber(result.bottom, 2)}</strong>、
-      <strong>Top ${formatNumber(result.top, 2)}</strong>、
-      <strong>k ${formatNumber(result.k, 4)}</strong>、
-      <strong>Inflection Cycle ${formatNumber(result.x0, 2)}</strong>。
-      Cq（二次微分最大值）為 <strong>${result.reportableCq === null ? "N/A" : formatNumber(result.reportableCq, 2)}</strong>
-      ${result.reportableCq === null ? `（raw estimate ${formatNumber(result.cq, 2)}，QC fail 不回報）` : ""}；
-      inflection cycle 為 <strong>${formatNumber(result.cqMaxSlope, 2)}</strong>。
-    </p>
+      4PL sigmoid�?strong>Bottom ${formatNumber(result.bottom, 2)}</strong>??      <strong>Top ${formatNumber(result.top, 2)}</strong>??      <strong>k ${formatNumber(result.k, 4)}</strong>??      <strong>Inflection Cycle ${formatNumber(result.x0, 2)}</strong>??      Cq（�?次微?��?大值�???<strong>${result.reportableCq === null ? "N/A" : formatNumber(result.reportableCq, 2)}</strong>
+      ${result.reportableCq === null ? `（raw estimate ${formatNumber(result.cq, 2)}，QC fail 不�??��?` : ""}�?      inflection cycle ??<strong>${formatNumber(result.cqMaxSlope, 2)}</strong>??    </p>
   `;
 }
 
@@ -406,7 +400,7 @@ function drawResidualChart(fit, padding, width, height, cssWidth, cssHeight) {
     ctx.fillText(formatNumber(value, 0), padding.left - 10, y);
   });
 
-  ctx.fillStyle = "#6d28d9";
+  ctx.fillStyle = "#7dd3fc";
   fit.residuals.forEach((value, index) => {
     const x = xScale(index + 1);
     const y = yScale(value);

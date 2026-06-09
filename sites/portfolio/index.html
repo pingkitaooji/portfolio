@@ -4,45 +4,45 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Hung Lin | 作品集</title>
-    <link rel="stylesheet" href="styles.css?v=20260609-experience">
+    <link rel="stylesheet" href="styles.css?v=20260609-skills-title">
   </head>
   <body>
     <header class="topbar">
       <a class="brand" href="#top">Hung Lin</a>
       <nav aria-label="作品集導覽">
-        <a href="#about">自介</a>
-        <a href="#projects">作品</a>
-        <a href="#skills">技能</a>
-        <a href="#contact">聯絡</a>
+        <a href="#about">Home</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
       </nav>
     </header>
 
     <main id="top">
       <section class="hero" id="about">
         <div class="hero-copy">
-          <p>Profile / Experience</p>
-          <h1>生醫資料流程、儀器演算法與 Django 系統整合。</h1>
-          <span>我將實驗室資料、儀器端演算法與網頁系統整理成可操作的產品原型，重點放在資料保存、模型驗證、報告輸出與 Docker 化部署。</span>
+          <p class="intro-line">Hello, I'm Hung Lin</p>
+          <span class="intro-en">Data Engineer / Bioinformatics Engineer with 4+ years of experience in biomedical data analysis and workflow automation, skilled in engineering laboratory data workflows into practical production systems.</span>
+          <span class="intro-zh">數據工程師／生物資訊工程師，具備 4 年以上生醫數據分析與流程自動化經驗，擅長將實驗室數據流程工程化並導入實際系統。</span>
           <div class="hero-actions">
             <a class="primary" href="#projects">查看專案</a>
             <a class="secondary" href="#contact">聯絡我</a>
           </div>
         </div>
-        <aside class="profile-panel" aria-label="個人經歷摘要">
-          <span>Experience Focus</span>
-          <h2>從實驗資料到可部署系統</h2>
+
+        <aside class="profile-panel" aria-label="經歷摘要">
+          <h1>Experience Focus</h1>
           <div class="profile-list">
-            <div><strong>Biomedical Workflow</strong><small>SNP、primer、qPCR 訊號與報告流程</small></div>
-            <div><strong>Backend Engineering</strong><small>Django API、資料庫、權限與檔案保存</small></div>
-            <div><strong>Algorithm Demo</strong><small>Python 計算模組、模型測試結果與前端互動展示</small></div>
-            <div><strong>Deployment</strong><small>Docker Compose、Nginx 子網域與作品集整合</small></div>
+            <div><strong>Biomedical Data Workflow</strong><small>qPCR、SNP、NGS 與實驗室數據流程自動化</small></div>
+            <div><strong>Reporting System</strong><small>健康風險評估報告、資料驗證與自助式報告產出</small></div>
+            <div><strong>Algorithm Engineering</strong><small>TGS 影像訊號處理、qPCR 訊號處理、Cq Calling 及曲線擬合分析</small></div>
+            <div><strong>System Integration</strong><small>Python、PHP / Laravel、Linux、AWS 與內部平台維運</small></div>
           </div>
         </aside>
       </section>
 
       <section id="projects" class="section">
         <div class="experience-head">
-          <h2>EXPERIENCE</h2>
+          <h2>PROJECTS</h2>
         </div>
         <div class="experience-list">
           <article class="experience-item">
@@ -51,8 +51,7 @@
               <span>Health Risk Assessment Report System</span>
               <h3>健康風險評估報告系統</h3>
               <strong>Django / Medical Report Workflow</strong>
-              <small>2026 Portfolio Project</small>
-              <p>以 Django 建立 SNP 上傳、PC/NC check、模擬風險計算、病人建檔、PDF 報告保存與下載流程。</p>
+              <p>雲端醫療報告平台，醫療院所人員可透過網頁上傳機台產生的 SNP資料，設定基本資訊與報告參數，並以最少人工操作自動產生對應的檢測報告。</p>
               <div class="project-links">
                 <a class="site-link" href="http://health.yourdomain.com" data-local-url="http://127.0.0.1:8000/login/">Live Demo</a>
                 <a href="https://github.com/pingkitaooji/portfolio" target="_blank" rel="noreferrer">GitHub</a>
@@ -66,8 +65,7 @@
               <span>CqCalling</span>
               <h3>qPCR Cq Calling Engine</h3>
               <strong>Python Algorithm / Instrument Signal Analysis</strong>
-              <small>2026 Portfolio Project</small>
-              <p>輸入 40 點螢光訊號，由 Python 後端執行 4PL sigmoid fitting、二次微分 Cq calling、QC 與 instrument-ready JSON。</p>
+              <p>此平台用於展示 qPCR Cq Calling 與曲線擬合分析流程，提供原始訊號視覺化、訊號品質檢查與分析結果輸出功能，作為演算法模組銜接儀器訊號處理流程展示。</p>
               <div class="project-links">
                 <a class="site-link" href="http://cqcalling.yourdomain.com" data-local-url="http://127.0.0.1:8002/">Live Demo</a>
                 <a href="https://github.com/pingkitaooji/portfolio" target="_blank" rel="noreferrer">GitHub</a>
@@ -76,13 +74,12 @@
           </article>
 
           <article class="experience-item">
-            <img class="project-visual" src="assets/primerqc-hero.png" alt="PrimerQC 引子模型預測示意圖">
+            <img class="project-visual" src="assets/primerqc-hero.png" alt="PrimerQC primer 預測模型示意圖">
             <div class="experience-copy">
               <span>PrimerQC</span>
               <h3>Primer Pair Quality Prediction</h3>
-              <strong>Model Validation / Primer Feature Scoring</strong>
-              <small>2026 Portfolio Project</small>
-              <p>輸入 forward / reverse primer 序列，以 Python 後端輸出 Primer3-style 特徵、模型可用性分數與模型測試結果。</p>
+              <strong>Model Validation / Primer Success Prediction</strong>
+              <p>訓練並比較五種機器學習模型，選擇表現最佳模型作為 primer pair 成功率預測模組。使用者可輸入 forward / reverse primer 序列，系統即時預測上機成功率，並保存測試結果作為後續資料蒐集與模型優化依據。</p>
               <div class="project-links">
                 <a class="site-link" href="http://primerqc.yourdomain.com" data-local-url="http://127.0.0.1:8003/">Live Demo</a>
                 <a href="https://github.com/pingkitaooji/portfolio" target="_blank" rel="noreferrer">GitHub</a>
@@ -93,21 +90,20 @@
       </section>
 
       <section id="skills" class="section split">
-        <div class="section-head">
-          <p>Architecture</p>
-          <h2>這個作品集展示的能力</h2>
+        <div class="section-head skills-head">
+          <h2>SKILLS</h2>
         </div>
         <div class="skill-list">
-          <div><strong>Django</strong><span>資料模型、登入、檔案保存、報告流程</span></div>
-          <div><strong>Docker Compose</strong><span>多服務容器化與資料 volume</span></div>
-          <div><strong>Nginx</strong><span>依子網域分流作品網站</span></div>
-          <div><strong>PDF Report</strong><span>醫療報告版型、風險摘要與免責聲明</span></div>
+          <div><strong>Backend & Web</strong><span>Python、Django、PHP、Laravel、API 與後台流程整合</span></div>
+          <div><strong>DevOps & Cloud</strong><span>Docker、Linux、AWS、Nginx、服務部署與環境管理</span></div>
+          <div><strong>Data & Scientific Computing</strong><span>MATLAB、Python data processing、qPCR signal analysis</span></div>
+          <div><strong>Biomedical Workflow</strong><span>SNP workflow、Primer feature scoring、PDF report generation</span></div>
         </div>
       </section>
 
       <section id="contact" class="section contact">
         <p>Contact</p>
-        <h2>對作品或職缺有興趣，歡迎直接來信。</h2>
+        <h2>如果你想了解更多專案細節，歡迎與我聯絡。</h2>
         <a class="mail-button" href="mailto:your.email@example.com?subject=Portfolio%20Contact">寄信給我</a>
       </section>
     </main>
