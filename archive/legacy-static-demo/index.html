@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>健康風險評估報告系統</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="系統導覽">
+        <div class="brand">
+          <div class="brand-mark">HR</div>
+          <div>
+            <strong>健康風險報告</strong>
+            <span>SNP Report System</span>
+          </div>
+        </div>
+        <nav>
+          <a href="#overview" class="active">總覽</a>
+          <a href="#snp">SNP 資料</a>
+          <a href="#patient">病人建檔</a>
+          <a href="#report">報告預覽</a>
+        </nav>
+        <div class="operator-card">
+          <span>操作者</span>
+          <strong id="operatorName">未登入</strong>
+          <button id="logoutBtn" type="button">登出</button>
+        </div>
+      </aside>
+
+      <main>
+        <section id="loginPanel" class="login-panel">
+          <div class="login-copy">
+            <p>醫療端工作台</p>
+            <h1>個人健康風險評估報告產生系統</h1>
+            <span>模擬機台自動上傳 SNP 資料、醫療端建檔與範例 PDF 報告產生流程。</span>
+          </div>
+          <form id="loginForm" class="login-form">
+            <label>
+              帳號
+              <input name="account" autocomplete="username" value="clinic_admin" required>
+            </label>
+            <label>
+              密碼
+              <input name="password" type="password" autocomplete="current-password" value="demo123" required>
+            </label>
+            <button type="submit">登入系統</button>
+          </form>
+        </section>
+
+        <section id="workspace" class="workspace hidden">
+          <header class="page-header">
+            <div>
+              <p>今日工作狀態</p>
+              <h1>報告產生工作台</h1>
+            </div>
+            <button id="simulateUploadBtn" type="button">模擬機台上傳 SNP</button>
+          </header>
+
+          <section id="overview" class="metrics-grid" aria-label="系統指標">
+            <div class="metric">
+              <span>已接收 SNP</span>
+              <strong id="snpCount">0</strong>
+            </div>
+            <div class="metric">
+              <span>可產生報告</span>
+              <strong id="readyCount">0</strong>
+            </div>
+            <div class="metric">
+              <span>已建立病人</span>
+              <strong id="patientCount">0</strong>
+            </div>
+            <div class="metric">
+              <span>範例報告</span>
+              <strong id="reportCount">0</strong>
+            </div>
+          </section>
+
+          <section class="content-grid">
+            <div id="snp" class="panel">
+              <div class="panel-head">
+                <div>
+                  <p>伺服器接收區</p>
+                  <h2>SNP 資料佇列</h2>
+                </div>
+                <span class="status-pill">自動彙整至資料庫</span>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>伺服器流水號</th>
+                      <th>機台流水號</th>
+                      <th>接收時間</th>
+                      <th>狀態</th>
+                    </tr>
+                  </thead>
+                  <tbody id="snpTable"></tbody>
+                </table>
+              </div>
+            </div>
+
+            <div id="patient" class="panel">
+              <div class="panel-head">
+                <div>
+                  <p>醫療方輸入</p>
+                  <h2>建立病人資訊</h2>
+                </div>
+              </div>
+              <form id="patientForm" class="patient-form">
+                <label>
+                  病人名稱
+                  <input name="patientName" placeholder="例如：王小明" required>
+                </label>
+                <label>
+                  性別
+                  <select name="gender" required>
+                    <option value="">請選擇</option>
+                    <option>女性</option>
+                    <option>男性</option>
+                    <option>其他 / 未揭露</option>
+                  </select>
+                </label>
+                <label>
+                  醫院端流水號
+                  <input name="hospitalId" placeholder="例如：HSP-20260531-001" required>
+                </label>
+                <label>
+                  對應 SNP 資料
+                  <select name="snpId" id="snpSelect" required></select>
+                </label>
+                <button type="submit">產生範例報告</button>
+              </form>
+            </div>
+          </section>
+
+          <section id="report" class="report-area">
+            <div class="panel">
+              <div class="panel-head">
+                <div>
+                  <p>報告輸出</p>
+                  <h2>個人健康風險評估報告預覽</h2>
+                </div>
+                <button id="downloadPdfBtn" type="button" disabled>下載範例 PDF</button>
+              </div>
+              <div id="reportPreview" class="report-preview empty">
+                <p>尚未產生報告。請先選擇 SNP 資料並建立病人資訊。</p>
+              </div>
+            </div>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

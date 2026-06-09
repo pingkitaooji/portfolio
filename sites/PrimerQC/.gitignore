@@ -1,0 +1,10 @@
+db.sqlite3
+staticfiles/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+private_data/
+modlebuild/2_UMU_primer_Tm_info_json_deidentified_2.csv
+server.err.log
+server.out.log

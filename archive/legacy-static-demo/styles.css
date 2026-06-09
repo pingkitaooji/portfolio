@@ -1,0 +1,443 @@
+:root {
+  color-scheme: light;
+  --ink: #17202a;
+  --muted: #687385;
+  --line: #dce2ea;
+  --surface: #ffffff;
+  --soft: #f4f7fb;
+  --teal: #0f766e;
+  --teal-dark: #0b5d57;
+  --coral: #c2410c;
+  --gold: #a16207;
+  --green: #15803d;
+  --shadow: 0 18px 48px rgba(25, 38, 52, 0.12);
+  font-family: "Segoe UI", "Noto Sans TC", Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--soft);
+  color: var(--ink);
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 6px;
+  background: var(--teal);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+  padding: 0.72rem 1rem;
+}
+
+button:hover {
+  background: var(--teal-dark);
+}
+
+button:disabled {
+  background: #aab4c1;
+  cursor: not-allowed;
+}
+
+.app-shell {
+  display: grid;
+  min-height: 100vh;
+  grid-template-columns: 280px 1fr;
+}
+
+.sidebar {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  gap: 1.5rem;
+  border-right: 1px solid var(--line);
+  background: #fbfcfe;
+  padding: 1.5rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.brand-mark {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 8px;
+  background: var(--teal);
+  color: #fff;
+  font-weight: 800;
+}
+
+.brand strong,
+.brand span,
+.operator-card span,
+.operator-card strong {
+  display: block;
+}
+
+.brand span,
+.operator-card span,
+.page-header p,
+.panel-head p,
+.login-copy p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+nav {
+  display: grid;
+  gap: 0.35rem;
+}
+
+nav a {
+  border-radius: 6px;
+  color: var(--ink);
+  padding: 0.75rem 0.8rem;
+  text-decoration: none;
+}
+
+nav a.active,
+nav a:hover {
+  background: #e7f3f1;
+  color: var(--teal-dark);
+}
+
+.operator-card {
+  margin-top: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  padding: 1rem;
+}
+
+.operator-card button {
+  margin-top: 0.8rem;
+  width: 100%;
+  background: #334155;
+}
+
+main {
+  padding: 1.5rem;
+}
+
+.login-panel {
+  display: grid;
+  min-height: calc(100vh - 3rem);
+  grid-template-columns: minmax(0, 1fr) 380px;
+  align-items: center;
+  gap: 2rem;
+}
+
+.login-copy {
+  min-height: 420px;
+  border-radius: 8px;
+  background:
+    linear-gradient(rgba(15, 118, 110, 0.82), rgba(23, 32, 42, 0.72)),
+    url("assets/medical-genetics-hero.png");
+  background-position: center;
+  background-size: cover;
+  color: #fff;
+  padding: clamp(2rem, 5vw, 4rem);
+}
+
+.login-copy p {
+  color: #d9f2ef;
+  font-weight: 700;
+}
+
+.login-copy h1 {
+  max-width: 760px;
+  margin: 1rem 0;
+  font-size: clamp(2.2rem, 5vw, 4.5rem);
+  line-height: 1.08;
+}
+
+.login-copy span {
+  display: block;
+  max-width: 620px;
+  color: #eef8f7;
+  font-size: 1.08rem;
+  line-height: 1.8;
+}
+
+.login-form,
+.patient-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.login-form {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  padding: 1.4rem;
+}
+
+label {
+  display: grid;
+  gap: 0.42rem;
+  color: #334155;
+  font-weight: 700;
+}
+
+input,
+select {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+  padding: 0.72rem 0.78rem;
+}
+
+input:focus,
+select:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.14);
+  outline: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+.workspace {
+  display: grid;
+  gap: 1.2rem;
+}
+
+.workspace.hidden {
+  display: none;
+}
+
+.page-header,
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.page-header h1,
+.panel-head h2 {
+  margin: 0.2rem 0 0;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.metric,
+.panel {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 12px 32px rgba(30, 41, 59, 0.06);
+}
+
+.metric {
+  padding: 1rem;
+}
+
+.metric span {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.metric strong {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 2rem;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+  gap: 1rem;
+}
+
+.panel {
+  padding: 1rem;
+}
+
+.status-pill {
+  border-radius: 999px;
+  background: #fef3c7;
+  color: var(--gold);
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.35rem 0.65rem;
+  white-space: nowrap;
+}
+
+.table-wrap {
+  margin-top: 1rem;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 620px;
+}
+
+th,
+td {
+  border-bottom: 1px solid var(--line);
+  padding: 0.78rem 0.55rem;
+  text-align: left;
+}
+
+th {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+td .ready {
+  color: var(--green);
+  font-weight: 800;
+}
+
+.report-area {
+  display: grid;
+}
+
+.report-preview {
+  margin-top: 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fbfdff;
+  padding: 1.2rem;
+}
+
+.report-preview.empty {
+  color: var(--muted);
+  min-height: 160px;
+}
+
+.report-sheet {
+  display: grid;
+  gap: 1rem;
+}
+
+.report-title {
+  border-bottom: 2px solid var(--teal);
+  padding-bottom: 0.8rem;
+}
+
+.report-title h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.report-meta,
+.risk-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.info-box,
+.risk-item {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.85rem;
+}
+
+.info-box span,
+.risk-item span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.risk-item strong {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 1.3rem;
+}
+
+.risk-high {
+  color: var(--coral);
+}
+
+.risk-mid {
+  color: var(--gold);
+}
+
+.risk-low {
+  color: var(--green);
+}
+
+@media (max-width: 1000px) {
+  .app-shell,
+  .login-panel,
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    min-height: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  nav {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  nav a {
+    text-align: center;
+  }
+
+  .operator-card {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 720px) {
+  main,
+  .sidebar {
+    padding: 1rem;
+  }
+
+  .metrics-grid,
+  .report-meta,
+  .risk-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-header,
+  .panel-head {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .page-header button,
+  .panel-head button {
+    width: 100%;
+  }
+
+  nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

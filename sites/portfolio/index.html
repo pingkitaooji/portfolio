@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hung Lin | 作品集</title>
+    <link rel="stylesheet" href="styles.css?v=20260609-experience">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#top">Hung Lin</a>
+      <nav aria-label="作品集導覽">
+        <a href="#about">自介</a>
+        <a href="#projects">作品</a>
+        <a href="#skills">技能</a>
+        <a href="#contact">聯絡</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" id="about">
+        <div class="hero-copy">
+          <p>Profile / Experience</p>
+          <h1>生醫資料流程、儀器演算法與 Django 系統整合。</h1>
+          <span>我將實驗室資料、儀器端演算法與網頁系統整理成可操作的產品原型，重點放在資料保存、模型驗證、報告輸出與 Docker 化部署。</span>
+          <div class="hero-actions">
+            <a class="primary" href="#projects">查看專案</a>
+            <a class="secondary" href="#contact">聯絡我</a>
+          </div>
+        </div>
+        <aside class="profile-panel" aria-label="個人經歷摘要">
+          <span>Experience Focus</span>
+          <h2>從實驗資料到可部署系統</h2>
+          <div class="profile-list">
+            <div><strong>Biomedical Workflow</strong><small>SNP、primer、qPCR 訊號與報告流程</small></div>
+            <div><strong>Backend Engineering</strong><small>Django API、資料庫、權限與檔案保存</small></div>
+            <div><strong>Algorithm Demo</strong><small>Python 計算模組、模型測試結果與前端互動展示</small></div>
+            <div><strong>Deployment</strong><small>Docker Compose、Nginx 子網域與作品集整合</small></div>
+          </div>
+        </aside>
+      </section>
+
+      <section id="projects" class="section">
+        <div class="experience-head">
+          <h2>EXPERIENCE</h2>
+        </div>
+        <div class="experience-list">
+          <article class="experience-item">
+            <img class="project-visual" src="assets/medical-genetics-hero.png" alt="健康風險評估報告系統示意圖">
+            <div class="experience-copy">
+              <span>Health Risk Assessment Report System</span>
+              <h3>健康風險評估報告系統</h3>
+              <strong>Django / Medical Report Workflow</strong>
+              <small>2026 Portfolio Project</small>
+              <p>以 Django 建立 SNP 上傳、PC/NC check、模擬風險計算、病人建檔、PDF 報告保存與下載流程。</p>
+              <div class="project-links">
+                <a class="site-link" href="http://health.yourdomain.com" data-local-url="http://127.0.0.1:8000/login/">Live Demo</a>
+                <a href="https://github.com/pingkitaooji/portfolio" target="_blank" rel="noreferrer">GitHub</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="experience-item reverse">
+            <img class="project-visual" src="assets/cqcalling-hero.png" alt="CqCalling qPCR 訊號分析示意圖">
+            <div class="experience-copy">
+              <span>CqCalling</span>
+              <h3>qPCR Cq Calling Engine</h3>
+              <strong>Python Algorithm / Instrument Signal Analysis</strong>
+              <small>2026 Portfolio Project</small>
+              <p>輸入 40 點螢光訊號，由 Python 後端執行 4PL sigmoid fitting、二次微分 Cq calling、QC 與 instrument-ready JSON。</p>
+              <div class="project-links">
+                <a class="site-link" href="http://cqcalling.yourdomain.com" data-local-url="http://127.0.0.1:8002/">Live Demo</a>
+                <a href="https://github.com/pingkitaooji/portfolio" target="_blank" rel="noreferrer">GitHub</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="experience-item">
+            <img class="project-visual" src="assets/primerqc-hero.png" alt="PrimerQC 引子模型預測示意圖">
+            <div class="experience-copy">
+              <span>PrimerQC</span>
+              <h3>Primer Pair Quality Prediction</h3>
+              <strong>Model Validation / Primer Feature Scoring</strong>
+              <small>2026 Portfolio Project</small>
+              <p>輸入 forward / reverse primer 序列，以 Python 後端輸出 Primer3-style 特徵、模型可用性分數與模型測試結果。</p>
+              <div class="project-links">
+                <a class="site-link" href="http://primerqc.yourdomain.com" data-local-url="http://127.0.0.1:8003/">Live Demo</a>
+                <a href="https://github.com/pingkitaooji/portfolio" target="_blank" rel="noreferrer">GitHub</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="skills" class="section split">
+        <div class="section-head">
+          <p>Architecture</p>
+          <h2>這個作品集展示的能力</h2>
+        </div>
+        <div class="skill-list">
+          <div><strong>Django</strong><span>資料模型、登入、檔案保存、報告流程</span></div>
+          <div><strong>Docker Compose</strong><span>多服務容器化與資料 volume</span></div>
+          <div><strong>Nginx</strong><span>依子網域分流作品網站</span></div>
+          <div><strong>PDF Report</strong><span>醫療報告版型、風險摘要與免責聲明</span></div>
+        </div>
+      </section>
+
+      <section id="contact" class="section contact">
+        <p>Contact</p>
+        <h2>對作品或職缺有興趣，歡迎直接來信。</h2>
+        <a class="mail-button" href="mailto:your.email@example.com?subject=Portfolio%20Contact">寄信給我</a>
+      </section>
+    </main>
+    <script src="dev-links.js"></script>
+  </body>
+</html>

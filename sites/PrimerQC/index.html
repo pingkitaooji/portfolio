@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PrimerQC | Primer Pair Quality Prediction</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="http://www.yourdomain.com" data-local-url="http://127.0.0.1/">Hung Lin</a>
+      <nav aria-label="Project navigation">
+        <a href="#predict">模型預測</a>
+        <a href="#records">驗證紀錄</a>
+        <a href="#model-validation">模型結果</a>
+        <a href="#architecture">架構</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-copy">
+          <p>PrimerQC</p>
+          <h1>Primer Pair Quality Prediction</h1>
+          <span>輸入 forward / reverse primer 序列，後端以 Python 抽取 Primer3-style 熱力學與結構特徵，快速預測該引子對是否適合上機執行，並可記錄真實實驗驗證結果。</span>
+        </div>
+        <aside class="model-summary">
+          <span class="panel-kicker">Python Model API</span>
+          <h2>快速驗證 primer 可行性</h2>
+          <p>目前頁面直接呼叫 Django `/api/predict/`，由 Python 計算 feature、可用機率與 PASS / REVIEW / FAIL。</p>
+          <div>
+            <strong>Backend</strong>
+            <span>Django + Python scoring module</span>
+          </div>
+          <div>
+            <strong>Benchmark</strong>
+            <span>下方呈現五種模型測試結果</span>
+          </div>
+        </aside>
+      </section>
+
+      <section class="workspace" id="workspace">
+        <div class="workspace-head">
+          <div>
+            <p>Model Workspace</p>
+            <h2>引子對可用性預測</h2>
+          </div>
+        </div>
+
+        <section id="predict" class="prediction-grid">
+          <form class="primer-form" id="primerForm">
+            <div class="form-row">
+              <label>
+                Assay ID
+                <input id="assayId" type="text" placeholder="ASSAY-2026-001">
+              </label>
+              <label>
+                Amplicon length (bp)
+                <input id="ampliconLength" type="number" min="40" max="600" value="142">
+              </label>
+            </div>
+            <label>
+              Forward primer
+              <textarea id="forwardPrimer" spellcheck="false" placeholder="ACGT..."></textarea>
+            </label>
+            <label>
+              Reverse primer
+              <textarea id="reversePrimer" spellcheck="false" placeholder="ACGT..."></textarea>
+            </label>
+            <label>
+              真實實驗驗證
+              <select id="validationStatus">
+                <option value="untested">尚未驗證</option>
+                <option value="pass">實驗成功</option>
+                <option value="fail">實驗失敗</option>
+                <option value="inconclusive">結果不明確</option>
+              </select>
+            </label>
+            <label>
+              驗證備註
+              <input id="validationNote" type="text" placeholder="例如：Ct 穩定、非特異性擴增、需重測">
+            </label>
+            <div class="button-row">
+              <button type="button" id="demoButton">產生 Demo</button>
+              <button type="submit">計算預測</button>
+            </div>
+          </form>
+
+          <section class="result-panel" aria-live="polite">
+            <div class="score-card" id="scoreCard">
+              <span>Usability Score</span>
+              <strong id="scoreValue">--</strong>
+              <small id="predictionLabel">等待輸入序列</small>
+            </div>
+            <div class="metric-grid">
+              <div><span>Tm diff</span><strong id="tmDiff">--</strong></div>
+              <div><span>Dimer risk</span><strong id="dimerRisk">--</strong></div>
+              <div><span>GC window</span><strong id="gcWindow">--</strong></div>
+              <div><span>Selected backend model</span><strong id="activeModelName">Loading</strong></div>
+            </div>
+            <table class="feature-table">
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Forward</th>
+                  <th>Reverse</th>
+                </tr>
+              </thead>
+              <tbody id="featureRows">
+                <tr><td colspan="3">輸入序列並計算後顯示特徵</td></tr>
+              </tbody>
+            </table>
+            <pre id="jsonOutput">{ "status": "waiting" }</pre>
+          </section>
+        </section>
+
+        <section id="records" class="records-section">
+          <div class="section-head">
+            <p>Experiment Feedback</p>
+            <h2>預測與真實驗證紀錄</h2>
+          </div>
+          <div class="records-actions">
+            <button id="saveRecordButton" type="button">保存本次結果</button>
+            <button id="clearRecordsButton" class="ghost" type="button">清除紀錄</button>
+          </div>
+          <div class="records-list" id="recordsList">尚無紀錄</div>
+        </section>
+
+        <section id="model-validation" class="model-validation">
+          <div class="section-head">
+            <p>Model Benchmark</p>
+            <h2>熱力學資料模型測試結果</h2>
+            <span id="modelDatasetSummary">讀取模型結果中...</span>
+          </div>
+          <div class="best-model-card" id="bestModelCard">
+            <span>Best Model</span>
+            <strong>Loading</strong>
+            <p>模型比較結果載入後顯示。</p>
+          </div>
+          <div class="model-table-wrap">
+            <table class="model-table">
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>Accuracy</th>
+                  <th>Balanced Acc.</th>
+                  <th>Precision</th>
+                  <th>Recall</th>
+                  <th>F1</th>
+                  <th>ROC AUC</th>
+                  <th>Confusion Matrix</th>
+                </tr>
+              </thead>
+              <tbody id="modelResultRows">
+                <tr><td colspan="8">尚未載入模型結果。</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="feature-importance" id="featureImportance"></div>
+        </section>
+
+        <section id="architecture" class="architecture">
+          <div>
+            <p>Backend-ready Design</p>
+            <h2>正式版可接 primer3-py 與資料庫</h2>
+          </div>
+          <ol>
+            <li>輸入 primer pair 與 amplicon length。</li>
+            <li>後端呼叫 primer3-py 計算 Tm、GC、hairpin、self dimer、hetero dimer 等特徵。</li>
+            <li>模型服務讀取特徵並輸出可用機率、PASS / REVIEW / FAIL。</li>
+            <li>實驗後回填驗證欄位，作為模型再訓練資料。</li>
+          </ol>
+        </section>
+      </section>
+    </main>
+
+    <script src="dev-links.js"></script>
+    <script src="modlebuild/model_results.js?v=20260608-model"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

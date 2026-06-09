@@ -1,0 +1,100 @@
+{% extends "reports/base.html" %}
+
+{% block content %}
+  <section class="metrics-grid" aria-label="系統指標">
+    <a class="metric metric-link" href="{% url 'snp_records' %}">
+      <span>已上傳 SNP 檔案</span>
+      <strong>{{ snp_count }}</strong>
+    </a>
+    <a class="metric metric-link" href="{% url 'snp_records' %}">
+      <span>需要處理</span>
+      <strong>{{ ready_count }}</strong>
+    </a>
+    <a class="metric metric-link" href="{% url 'report_list' %}">
+      <span>已建立報告</span>
+      <strong>{{ report_count }}</strong>
+    </a>
+    <div class="metric">
+      <span>PC / NC 通過</span>
+      <strong>{{ pc_pass_count }} / {{ nc_pass_count }}</strong>
+    </div>
+    <a class="metric metric-link" href="{% url 'snp_records' %}">
+      <span>已完成風險計算</span>
+      <strong>{{ risk_count }}</strong>
+    </a>
+  </section>
+
+  <section class="overview-grid">
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <p>已上傳</p>
+          <h2>最近 SNP 檔案</h2>
+        </div>
+        <a class="text-link" href="{% url 'snp_records' %}">查看資料內容</a>
+      </div>
+      <div class="compact-list">
+        {% for snp in uploaded_snp_records %}
+          <article>
+            <strong>{{ snp.server_serial }}</strong>
+            <span>
+              {{ snp.machine_serial }} / {{ snp.snp_count }} SNP / PC {% if snp.pc_check_passed %}Pass{% else %}Fail{% endif %} / NC {% if snp.nc_check_passed %}Pass{% else %}Fail{% endif %}
+              {% if request.user.is_staff %} / 建立者：{{ snp.created_by.username|default:"未指定" }}{% endif %}
+            </span>
+          </article>
+        {% empty %}
+          <p class="empty">尚未上傳 SNP 檔案。</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <p>需要處理</p>
+          <h2>待建立報告的 SNP</h2>
+        </div>
+        <a class="text-link" href="{% url 'snp_records' %}">前往處理</a>
+      </div>
+      <div class="compact-list">
+        {% for snp in pending_snp_records %}
+          <article>
+            <strong>{{ snp.server_serial }}</strong>
+            <span>
+              {{ snp.uploaded_at|date:"Y-m-d H:i" }} / {{ snp.machine_serial }} / {{ snp.get_status_display }}
+              {% if request.user.is_staff %} / 建立者：{{ snp.created_by.username|default:"未指定" }}{% endif %}
+            </span>
+          </article>
+        {% empty %}
+          <p class="empty">目前沒有待處理 SNP。</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <p>已完成</p>
+        <h2>最近建立的報告</h2>
+      </div>
+      <a class="text-link" href="{% url 'report_list' %}">查看報告列表</a>
+    </div>
+    <div class="report-list">
+      {% for report in recent_reports %}
+        <article class="report-row">
+          <div>
+            <strong>{{ report.report_serial }}</strong>
+            <span>
+              {{ report.patient.name }} / {{ report.patient.hospital_serial }} / {{ report.snp_record.server_serial }}
+              {% if request.user.is_staff %} / 建立者：{{ report.created_by.username|default:"未指定" }}{% endif %}
+            </span>
+          </div>
+          <a href="{% url 'report_list' %}?selected={{ report.pk }}">預覽</a>
+        </article>
+      {% empty %}
+        <p class="empty">尚未建立報告。</p>
+      {% endfor %}
+    </div>
+  </section>
+{% endblock %}

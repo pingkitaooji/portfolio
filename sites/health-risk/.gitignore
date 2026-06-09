@@ -1,0 +1,10 @@
+.env
+db.sqlite3
+media/
+staticfiles/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+.pytest_cache/
+server.err.log
+server.out.log

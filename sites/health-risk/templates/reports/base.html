@@ -1,0 +1,56 @@
+{% load static %}
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}健康風險評估報告系統{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'reports/styles.css' %}">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="系統導覽">
+        <div class="brand">
+          <div class="brand-mark">HR</div>
+          <div>
+            <strong>健康風險評估報告系統</strong>
+            <span>Health Risk Assessment Report System</span>
+          </div>
+        </div>
+        <nav>
+          <a href="{% url 'dashboard' %}" class="{% if active_page == 'dashboard' %}active{% endif %}">總覽</a>
+          <a href="{% url 'snp_records' %}" class="{% if active_page == 'snp' %}active{% endif %}">SNP 資料</a>
+          <a href="{% url 'report_list' %}" class="{% if active_page == 'reports' %}active{% endif %}">報告列表</a>
+        </nav>
+        <div class="operator-card">
+          <span>帳戶</span>
+          <strong>{{ request.user.username }}</strong>
+          <form action="{% url 'logout' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">登出</button>
+          </form>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="page-header">
+          <div>
+            <p>{{ page_kicker }}</p>
+            <h1>{{ page_title }}</h1>
+          </div>
+          <a class="api-link" href="{% url 'snp_upload_api' %}">機台 API：/api/snp-upload/</a>
+        </header>
+
+        {% if messages %}
+          <div class="messages">
+            {% for message in messages %}
+              <p class="{{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </body>
+</html>

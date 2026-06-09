@@ -1,0 +1,184 @@
+{% extends "reports/base.html" %}
+
+{% block content %}
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <p>SNP 上傳</p>
+        <h2>上傳或產生 DEMO SNP，點選檔案後建立病人與報告</h2>
+      </div>
+      <span class="status-pill">含 SNP 解析、PC check、NC check、風險計算</span>
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="inline-form snp-upload-form">
+      {% csrf_token %}
+      <label>{{ upload_form.machine_serial.label }}{{ upload_form.machine_serial }}</label>
+      <label>{{ upload_form.data_file.label }}{{ upload_form.data_file }}</label>
+      <button type="submit">上傳 SNP 資料</button>
+    </form>
+    <form method="post" class="demo-form">
+      {% csrf_token %}
+      <input type="hidden" name="action" value="generate_demo">
+      <button type="submit">產生 DEMO SNP 資料</button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <p>已上傳檔案</p>
+        <h2>點選檔案查看資料並處理</h2>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>伺服器統一流水號</th>
+            <th>機台流水號</th>
+            <th>SNP 筆數</th>
+            <th>PC</th>
+            <th>NC</th>
+            <th>狀態</th>
+            {% if request.user.is_staff %}<th>建立者</th>{% endif %}
+            <th>動作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for snp in snp_records %}
+            <tr class="{% if selected_snp and selected_snp.pk == snp.pk %}selected-row{% endif %}">
+              <td>{{ snp.server_serial }}</td>
+              <td>{{ snp.machine_serial }}</td>
+              <td>{{ snp.snp_count }}</td>
+              <td><span class="check {% if snp.pc_check_passed %}pass{% else %}fail{% endif %}">{% if snp.pc_check_passed %}Pass{% else %}Fail{% endif %}</span></td>
+              <td><span class="check {% if snp.nc_check_passed %}pass{% else %}fail{% endif %}">{% if snp.nc_check_passed %}Pass{% else %}Fail{% endif %}</span></td>
+              <td>{{ snp.get_status_display }}</td>
+              {% if request.user.is_staff %}<td>{{ snp.created_by.username|default:"未指定" }}</td>{% endif %}
+              <td>
+                <div class="row-actions">
+                  <a href="{% url 'snp_records' %}?selected={{ snp.pk }}">查看/處理</a>
+                  <a class="danger-link" href="{% url 'delete_snp' snp.pk %}">刪除</a>
+                </div>
+              </td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="{% if request.user.is_staff %}8{% else %}7{% endif %}">尚未接收 SNP 資料。</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  {% if selected_snp %}
+    <section class="content-grid">
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <p>{{ selected_snp.server_serial }}</p>
+            <h2>解析出的 SNP</h2>
+            {% if request.user.is_staff %}
+              <span>建立者：{{ selected_snp.created_by.username|default:"未指定" }}</span>
+            {% endif %}
+          </div>
+          <span class="status-pill">{{ selected_inspection.snp_count }} 筆</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>SNP</th>
+                <th>Chr</th>
+                <th>Position</th>
+                <th>Genotype</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for row in selected_inspection.snp_rows %}
+                <tr>
+                  <td>{{ row.snp_id }}</td>
+                  <td>{{ row.chromosome }}</td>
+                  <td>{{ row.position }}</td>
+                  <td>{{ row.genotype }}</td>
+                </tr>
+              {% empty %}
+                <tr><td colspan="4">此檔案尚未解析出 SNP 列。</td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <p>病人建檔</p>
+            <h2>以此 SNP 產生報告</h2>
+          </div>
+        </div>
+        <form method="post" class="patient-form">
+          {% csrf_token %}
+          <input type="hidden" name="action" value="create_report">
+          <input type="hidden" name="snp_record" value="{{ selected_snp.pk }}">
+          <label>{{ report_form.patient_name.label }}{{ report_form.patient_name }}</label>
+          <label>{{ report_form.gender.label }}{{ report_form.gender }}</label>
+          <label>{{ report_form.hospital_serial.label }}{{ report_form.hospital_serial }}</label>
+          <button type="submit">產生並保存 PDF 報告</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="content-grid">
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <p>檔案內容</p>
+            <h2>原始資料預覽</h2>
+          </div>
+        </div>
+        <div class="check-grid">
+          <div class="check-card">
+            <span>PC check</span>
+            <strong class="{% if selected_inspection.pc_check_passed %}pass-text{% else %}fail-text{% endif %}">{% if selected_inspection.pc_check_passed %}Pass{% else %}Fail{% endif %}</strong>
+          </div>
+          <div class="check-card">
+            <span>NC check</span>
+            <strong class="{% if selected_inspection.nc_check_passed %}pass-text{% else %}fail-text{% endif %}">{% if selected_inspection.nc_check_passed %}Pass{% else %}Fail{% endif %}</strong>
+          </div>
+        </div>
+        <pre class="raw-preview">{{ selected_inspection.raw_preview }}</pre>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <p>模擬風險計算</p>
+            <h2>SNP 風險結果</h2>
+          </div>
+          {% if selected_risk %}
+            <span class="status-pill">總風險分數 {{ selected_risk.overall_risk_score }}</span>
+          {% endif %}
+        </div>
+        {% if selected_risk %}
+          <div class="risk-grid compact-risk-grid">
+            {% for risk in selected_risk.risk_results %}
+              <div class="risk-item">
+                <span>{{ risk.name }}</span>
+                <strong>{{ risk.level }} / {{ risk.score }}</strong>
+                <p>{{ risk.note }}</p>
+                <div class="mini-snp-list">
+                  {% for snp in risk.matched_snps %}
+                    <em>{{ snp.snp_id }} {{ snp.genotype }} {{ snp.effect }}</em>
+                  {% empty %}
+                    <em>未命中模擬位點</em>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="empty">尚未完成風險計算。</p>
+        {% endif %}
+      </div>
+    </section>
+  {% endif %}
+{% endblock %}

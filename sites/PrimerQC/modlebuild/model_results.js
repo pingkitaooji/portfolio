@@ -1,0 +1,174 @@
+window.PRIMER_MODEL_RESULTS = {
+  "dataset": {
+    "source_file": "confidential_training_dataset_redacted.csv",
+    "row_count": 161,
+    "feature_count": 23,
+    "train_count": 120,
+    "test_count": 41,
+    "positive_label": "success",
+    "class_distribution": {
+      "fail": 91,
+      "success": 70
+    },
+    "split": "stratified train_test_split",
+    "test_size": 0.25,
+    "random_state": 42
+  },
+  "feature_columns": [
+    "F_gc_content",
+    "F_gc_clamp",
+    "R_gc_content",
+    "R_gc_clamp",
+    "F_tm",
+    "R_tm",
+    "tm_diff",
+    "F_haripin",
+    "R_haripin",
+    "F_homodimer",
+    "R_homodimer",
+    "heterodimer",
+    "end_stability",
+    "F_repeat",
+    "R_repeat",
+    "F_len",
+    "R_len",
+    "len_diff",
+    "avg_gc_content",
+    "avg_tm",
+    "max_hairpin",
+    "max_homodimer",
+    "max_repeat"
+  ],
+  "models": [
+    {
+      "model_key": "logistic_regression",
+      "display_name": "Logistic Regression",
+      "metrics": {
+        "accuracy": 0.6829,
+        "balanced_accuracy": 0.6812,
+        "precision_success": 0.6316,
+        "recall_success": 0.6667,
+        "f1_success": 0.6486,
+        "roc_auc": 0.7585
+      },
+      "confusion_matrix": {
+        "tn_fail": 16,
+        "fp_fail_as_success": 7,
+        "fn_success_as_fail": 6,
+        "tp_success": 12
+      }
+    },
+    {
+      "model_key": "extra_trees",
+      "display_name": "Extra Trees",
+      "metrics": {
+        "accuracy": 0.6098,
+        "balanced_accuracy": 0.622,
+        "precision_success": 0.5417,
+        "recall_success": 0.7222,
+        "f1_success": 0.619,
+        "roc_auc": 0.7029
+      },
+      "confusion_matrix": {
+        "tn_fail": 12,
+        "fp_fail_as_success": 11,
+        "fn_success_as_fail": 5,
+        "tp_success": 13
+      }
+    },
+    {
+      "model_key": "hist_gradient_boosting",
+      "display_name": "Hist Gradient Boosting",
+      "metrics": {
+        "accuracy": 0.6585,
+        "balanced_accuracy": 0.6534,
+        "precision_success": 0.6111,
+        "recall_success": 0.6111,
+        "f1_success": 0.6111,
+        "roc_auc": 0.7005
+      },
+      "confusion_matrix": {
+        "tn_fail": 16,
+        "fp_fail_as_success": 7,
+        "fn_success_as_fail": 7,
+        "tp_success": 11
+      }
+    },
+    {
+      "model_key": "random_forest",
+      "display_name": "Random Forest",
+      "metrics": {
+        "accuracy": 0.6098,
+        "balanced_accuracy": 0.5978,
+        "precision_success": 0.5625,
+        "recall_success": 0.5,
+        "f1_success": 0.5294,
+        "roc_auc": 0.7101
+      },
+      "confusion_matrix": {
+        "tn_fail": 16,
+        "fp_fail_as_success": 7,
+        "fn_success_as_fail": 9,
+        "tp_success": 9
+      }
+    },
+    {
+      "model_key": "xgboost",
+      "display_name": "XGBoost",
+      "metrics": {
+        "accuracy": 0.5854,
+        "balanced_accuracy": 0.5761,
+        "precision_success": 0.5294,
+        "recall_success": 0.5,
+        "f1_success": 0.5143,
+        "roc_auc": 0.6932
+      },
+      "confusion_matrix": {
+        "tn_fail": 15,
+        "fp_fail_as_success": 8,
+        "fn_success_as_fail": 9,
+        "tp_success": 9
+      }
+    }
+  ],
+  "best_model": {
+    "model_key": "logistic_regression",
+    "display_name": "Logistic Regression",
+    "selection_rule": "highest F1(success), then ROC AUC, then balanced accuracy",
+    "artifact": "best_primer_model.joblib",
+    "top_features": [
+      {
+        "feature": "heterodimer",
+        "importance": 1.69656
+      },
+      {
+        "feature": "F_len",
+        "importance": 1.0265
+      },
+      {
+        "feature": "R_len",
+        "importance": 0.90633
+      },
+      {
+        "feature": "len_diff",
+        "importance": 0.8853
+      },
+      {
+        "feature": "tm_diff",
+        "importance": 0.5639
+      },
+      {
+        "feature": "R_haripin",
+        "importance": 0.38029
+      },
+      {
+        "feature": "F_gc_clamp",
+        "importance": 0.31384
+      },
+      {
+        "feature": "F_repeat",
+        "importance": 0.26781
+      }
+    ]
+  }
+};

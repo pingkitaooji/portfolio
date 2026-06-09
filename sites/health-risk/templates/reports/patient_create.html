@@ -1,0 +1,42 @@
+{% extends "reports/base.html" %}
+
+{% block content %}
+  <section class="content-grid">
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <p>醫療方輸入</p>
+          <h2>建立病人資訊並產生報告</h2>
+        </div>
+        <span class="status-pill">使用可產生報告的 SNP 資料</span>
+      </div>
+      <form method="post" class="patient-form">
+        {% csrf_token %}
+        <label>{{ report_form.patient_name.label }}{{ report_form.patient_name }}</label>
+        <label>{{ report_form.gender.label }}{{ report_form.gender }}</label>
+        <label>{{ report_form.hospital_serial.label }}{{ report_form.hospital_serial }}</label>
+        <label>{{ report_form.snp_record.label }}{{ report_form.snp_record }}</label>
+        <button type="submit">產生並保存 PDF 報告</button>
+      </form>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div>
+          <p>近期建檔</p>
+          <h2>病人列表</h2>
+        </div>
+      </div>
+      <div class="compact-list">
+        {% for patient in patients %}
+          <article>
+            <strong>{{ patient.name }}</strong>
+            <span>{{ patient.get_gender_display }} / {{ patient.hospital_serial }} / {{ patient.created_at|date:"Y-m-d H:i" }}</span>
+          </article>
+        {% empty %}
+          <p class="empty">尚未建立病人資料。</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endblock %}

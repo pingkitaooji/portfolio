@@ -1,0 +1,89 @@
+{% extends "reports/base.html" %}
+
+{% block content %}
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <p>所有已建立報告</p>
+        <h2>點選報告後在下方預覽內容</h2>
+      </div>
+    </div>
+    <div class="report-list">
+      {% for report in reports %}
+        <article class="report-row {% if selected_report and selected_report.pk == report.pk %}selected-row{% endif %}">
+          <div>
+            <strong>{{ report.report_serial }}</strong>
+            <span>
+              {{ report.patient.name }} / {{ report.patient.hospital_serial }} / {{ report.snp_record.server_serial }} / {{ report.created_at|date:"Y-m-d H:i" }}
+              {% if request.user.is_staff %} / 建立者：{{ report.created_by.username|default:"未指定" }}{% endif %}
+            </span>
+          </div>
+          <div class="row-actions">
+            <a href="{% url 'report_list' %}?selected={{ report.pk }}">預覽</a>
+            <a href="{% url 'download_report' report.pk %}">下載 PDF</a>
+            <a class="danger-link" href="{% url 'delete_report' report.pk %}">刪除</a>
+          </div>
+        </article>
+      {% empty %}
+        <p class="empty">尚未產生報告。請先到 SNP 資料頁選擇檔案並建立病人資料。</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  {% if selected_report %}
+    <section class="panel report-preview-panel">
+      <div class="panel-head">
+        <div>
+          <p>{{ selected_report.report_serial }}</p>
+          <h2>報告內容預覽</h2>
+        </div>
+        <a class="api-link" href="{% url 'download_report' selected_report.pk %}">下載 PDF</a>
+      </div>
+
+      <div class="report-sheet">
+        <div class="report-title">
+          <h3>健康風險評估報告系統</h3>
+          <p>產生時間：{{ selected_report.created_at|date:"Y-m-d H:i" }}</p>
+        </div>
+        <div class="report-meta">
+          <div class="info-box"><span>病人名稱</span><strong>{{ selected_report.patient.name }}</strong></div>
+          <div class="info-box"><span>性別</span><strong>{{ selected_report.patient.get_gender_display }}</strong></div>
+          <div class="info-box"><span>醫院端流水號</span><strong>{{ selected_report.patient.hospital_serial }}</strong></div>
+          {% if request.user.is_staff %}
+            <div class="info-box"><span>建立者</span><strong>{{ selected_report.created_by.username|default:"未指定" }}</strong></div>
+          {% endif %}
+          <div class="info-box"><span>SNP 統一流水號</span><strong>{{ selected_report.snp_record.server_serial }}</strong></div>
+          <div class="info-box"><span>機台流水號</span><strong>{{ selected_report.snp_record.machine_serial }}</strong></div>
+          <div class="info-box"><span>SNP 筆數</span><strong>{{ selected_report.snp_record.snp_count }}</strong></div>
+        </div>
+        <div class="risk-grid">
+          {% for risk in selected_report.risk_summary %}
+            <div class="risk-item">
+              <span>{{ risk.name }}</span>
+              <strong>{{ risk.level }}{% if risk.score is not None %} / {{ risk.score }}{% endif %}</strong>
+              <p>{{ risk.note }}</p>
+            </div>
+          {% endfor %}
+        </div>
+        <div class="report-section">
+          <h4>固定醫療建議</h4>
+          <div class="advice-list">
+            {% for item in selected_report.medical_advice %}
+              <div class="advice-item">
+                <strong>{{ item.risk_name }} / {{ item.level }}</strong>
+                <p>{{ item.recommendation }}</p>
+              </div>
+            {% empty %}
+              <p>尚未建立醫療建議。</p>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="report-section disclaimer-box">
+          <h4>免責聲明</h4>
+          <p>{{ selected_report.disclaimer }}</p>
+        </div>
+        <p class="hint">此預覽為資料庫中的報告摘要；正式 PDF 檔案已保存於系統，可由上方按鈕下載。</p>
+      </div>
+    </section>
+  {% endif %}
+{% endblock %}

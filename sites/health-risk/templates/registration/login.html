@@ -1,0 +1,37 @@
+{% load static %}
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>登入 - 健康風險評估報告系統</title>
+    <link rel="stylesheet" href="{% static 'reports/styles.css' %}">
+  </head>
+  <body>
+    <main class="login-layout">
+      <section class="login-copy">
+        <p>醫療端工作台</p>
+        <h1>健康風險評估報告系統</h1>
+        <span>以 Django 保存 SNP 資料、病人資料與報告 PDF，支援醫療端登入後產生範例報告。</span>
+      </section>
+      <form method="post" class="login-form">
+        {% csrf_token %}
+        <h2>登入系統</h2>
+        {% if form.errors %}
+          <p class="form-error">帳號或密碼不正確，請重新輸入。</p>
+        {% endif %}
+        <label>
+          帳號
+          {{ form.username }}
+        </label>
+        <label>
+          密碼
+          {{ form.password }}
+        </label>
+        <button type="submit">登入系統</button>
+        <p class="hint">後台操作者：clinic_admin / demo123</p>
+        <p class="hint">院所帳號：hospital_a、hospital_b、hospital_c / demo123</p>
+      </form>
+    </main>
+  </body>
+</html>

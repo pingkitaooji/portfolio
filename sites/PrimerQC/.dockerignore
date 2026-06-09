@@ -1,0 +1,6 @@
+private_data/
+modlebuild/2_UMU_primer_Tm_info_json_deidentified_2.csv
+staticfiles/
+__pycache__/
+*.py[cod]
+db.sqlite3

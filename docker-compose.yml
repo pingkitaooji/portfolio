@@ -1,0 +1,55 @@
+services:
+  reverse-proxy:
+    image: nginx:1.27-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./infrastructure/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - media_data:/srv/health-media:ro
+    depends_on:
+      - portfolio
+      - web
+      - cqcalling
+      - primerqc
+
+  portfolio:
+    image: nginx:1.27-alpine
+    volumes:
+      - ./sites/portfolio:/usr/share/nginx/html:ro
+
+  web:
+    build: ./sites/health-risk
+    command: gunicorn healthrisk.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - media_data:/app/media
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  cqcalling:
+    build: ./sites/CqCalling
+    command: gunicorn cqcalling_site.wsgi:application --bind 0.0.0.0:8000
+    ports:
+      - "8002:8000"
+
+  primerqc:
+    build: ./sites/PrimerQC
+    command: gunicorn primerqc_site.wsgi:application --bind 0.0.0.0:8000
+    ports:
+      - "8003:8000"
+
+  db:
+    image: postgres:16-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-healthrisk}
+      POSTGRES_USER: ${POSTGRES_USER:-healthrisk}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-healthrisk}
+
+volumes:
+  postgres_data:
+  media_data:
