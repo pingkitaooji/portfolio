@@ -1,4 +1,4 @@
-{% load static %}
+﻿{% load static %}
 <!doctype html>
 <html lang="zh-Hant">
   <head>
@@ -10,9 +10,9 @@
   <body>
     <main class="login-layout">
       <section class="login-copy">
-        <p>醫療端工作台</p>
+        <p>醫療資料管理平台</p>
         <h1>健康風險評估報告系統</h1>
-        <span>以 Django 保存 SNP 資料、病人資料與報告 PDF，支援醫療端登入後產生範例報告。</span>
+        <span>登入後可管理 SNP 上傳資料、病人建檔、風險計算結果與報告產出流程。</span>
       </section>
       <form method="post" class="login-form">
         {% csrf_token %}
@@ -22,11 +22,11 @@
         {% endif %}
         <label>
           帳號
-          {{ form.username }}
+          <input type="text" name="username" value="{{ form.username.value|default:'clinic_admin' }}" autocomplete="username" required>
         </label>
         <label>
           密碼
-          {{ form.password }}
+          <input type="password" name="password" value="demo123" autocomplete="current-password" required>
         </label>
         <button type="submit">登入系統</button>
         <p class="hint">後台操作者：clinic_admin / demo123</p>

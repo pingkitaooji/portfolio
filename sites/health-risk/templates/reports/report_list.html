@@ -52,8 +52,7 @@
           {% if request.user.is_staff %}
             <div class="info-box"><span>建立者</span><strong>{{ selected_report.created_by.username|default:"未指定" }}</strong></div>
           {% endif %}
-          <div class="info-box"><span>SNP 統一流水號</span><strong>{{ selected_report.snp_record.server_serial }}</strong></div>
-          <div class="info-box"><span>機台流水號</span><strong>{{ selected_report.snp_record.machine_serial }}</strong></div>
+          <div class="info-box"><span>樣本流水號</span><strong>{{ selected_report.snp_record.server_serial }}</strong></div>
           <div class="info-box"><span>SNP 筆數</span><strong>{{ selected_report.snp_record.snp_count }}</strong></div>
         </div>
         <div class="risk-grid">

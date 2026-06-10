@@ -11,12 +11,11 @@ class SNPRecord(models.Model):
     ]
 
     server_serial = models.CharField(
-        "伺服器統一流水號",
+        "樣本流水號",
         max_length=40,
         unique=True,
         editable=False,
     )
-    machine_serial = models.CharField("機台流水號", max_length=40)
     data_file = models.FileField("SNP 原始資料", upload_to="snp_data/%Y/%m/%d/")
     uploaded_at = models.DateTimeField("接收時間", auto_now_add=True)
     status = models.CharField("狀態", max_length=12, choices=STATUS_CHOICES, default="ready")
@@ -43,7 +42,7 @@ class SNPRecord(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.server_serial} / {self.machine_serial}"
+        return self.server_serial
 
 
 class Patient(models.Model):

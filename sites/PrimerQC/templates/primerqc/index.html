@@ -5,37 +5,32 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>PrimerQC | Primer Pair Quality Prediction</title>
-    <link rel="stylesheet" href="{% static 'primerqc/styles.css' %}?v=20260608-name">
+    <link rel="stylesheet" href="{% static 'primerqc/styles.css' %}?v=20260610-hero">
   </head>
   <body>
     <header class="topbar">
       <a class="brand" href="http://www.yourdomain.com" data-local-url="http://127.0.0.1/">Hung Lin</a>
       <nav aria-label="Project navigation">
         <a href="#predict">模型預測</a>
-        <a href="#records">驗證紀錄</a>
+        <!-- Experiment Feedback section is disabled. -->
         <a href="#model-validation">模型結果</a>
-        <a href="#architecture">架構</a>
       </nav>
     </header>
 
     <main>
       <section class="hero">
         <div class="hero-copy">
-          <p>PrimerQC</p>
-          <h1>Primer Pair Quality Prediction</h1>
-          <span>輸入 forward / reverse primer 序列，後端以 Python 抽取 Primer3-style 熱力學與結構特徵，快速預測該引子對是否適合上機執行，並可記錄真實實驗驗證結果。</span>
+          <p>引子成功率預測</p>
+          <h1>Primer Success Prediction</h1>
+          <span>訓練並比較五種機器學習模型，選擇表現最佳模型作為 primer pair 成功率預測模組。使用者可輸入 forward / reverse primer 序列，系統即時預測上機成功率，並保存測試結果作為後續資料蒐集與模型優化依據。</span>
         </div>
         <aside class="model-summary">
-          <span class="panel-kicker">Python Model API</span>
-          <h2>快速驗證 primer 可行性</h2>
-          <p>目前頁面直接呼叫 Django `/api/predict/`，由 Python 計算 feature、可用機率與 PASS / REVIEW / FAIL。</p>
+          <span class="panel-kicker">Project Snapshot</span>
+          <!--<h2>快速驗證 primer 可行性</h2>-->
+          <p>A machine learning demo for predicting primer pair success and classifying results as Pass, Review, or Fail.</p>
           <div>
-            <strong>Backend</strong>
-            <span>Django + Python scoring module</span>
-          </div>
-          <div>
-            <strong>Benchmark</strong>
-            <span>下方呈現五種模型測試結果</span>
+            <strong>Tech Stack</strong>
+            <span>Python / Django</span>
           </div>
         </aside>
       </section>
@@ -68,6 +63,8 @@
               Reverse primer
               <textarea id="reversePrimer" spellcheck="false" placeholder="ACGT..."></textarea>
             </label>
+            <!--
+            #delete this function of check final result
             <label>
               真實實驗驗證
               <select id="validationStatus">
@@ -81,6 +78,7 @@
               驗證備註
               <input id="validationNote" type="text" placeholder="例如：Ct 穩定、非特異性擴增、需重測">
             </label>
+            -->
             <div class="button-row">
               <button type="button" id="demoButton">產生 Demo</button>
               <button type="submit">計算預測</button>
@@ -111,10 +109,9 @@
                 <tr><td colspan="3">輸入序列並計算後顯示特徵</td></tr>
               </tbody>
             </table>
-            <pre id="jsonOutput">{ "status": "waiting" }</pre>
           </section>
         </section>
-
+        <!--
         <section id="records" class="records-section">
           <div class="section-head">
             <p>Experiment Feedback</p>
@@ -126,7 +123,7 @@
           </div>
           <div class="records-list" id="recordsList">尚無紀錄</div>
         </section>
-
+        -->
         <section id="model-validation" class="model-validation">
           <div class="section-head">
             <p>Model Benchmark</p>
@@ -158,19 +155,6 @@
             </table>
           </div>
           <div class="feature-importance" id="featureImportance"></div>
-        </section>
-
-        <section id="architecture" class="architecture">
-          <div>
-            <p>Backend-ready Design</p>
-            <h2>正式版可接 primer3-py 與資料庫</h2>
-          </div>
-          <ol>
-            <li>輸入 primer pair 與 amplicon length。</li>
-            <li>後端呼叫 primer3-py 計算 Tm、GC、hairpin、self dimer、hetero dimer 等特徵。</li>
-            <li>模型服務讀取特徵並輸出可用機率、PASS / REVIEW / FAIL。</li>
-            <li>實驗後回填驗證欄位，作為模型再訓練資料。</li>
-          </ol>
         </section>
       </section>
     </main>

@@ -214,14 +214,14 @@ def build_meta_table(patient, snp_record, styles):
             meta_cell("醫院端流水號", patient.hospital_serial, styles),
         ],
         [
-            meta_cell("SNP 統一流水號", snp_record.server_serial, styles),
-            meta_cell("機台流水號", snp_record.machine_serial, styles),
+            meta_cell("樣本流水號", snp_record.server_serial, styles),
             meta_cell("SNP 筆數", str(snp_record.snp_count), styles),
+            meta_cell("報告屬性", "DEMO / 非臨床診斷", styles),
         ],
         [
             meta_cell("PC Check", "通過" if snp_record.pc_check_passed else "未通過", styles),
             meta_cell("NC Check", "通過" if snp_record.nc_check_passed else "未通過", styles),
-            meta_cell("報告屬性", "DEMO / 非臨床診斷", styles),
+            meta_cell("資料來源", "SNP 上傳檔案", styles),
         ],
     ]
     table = Table(rows, colWidths=[53 * mm, 53 * mm, 53 * mm], rowHeights=[20 * mm] * 3)

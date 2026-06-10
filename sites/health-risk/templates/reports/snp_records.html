@@ -12,7 +12,6 @@
 
     <form method="post" enctype="multipart/form-data" class="inline-form snp-upload-form">
       {% csrf_token %}
-      <label>{{ upload_form.machine_serial.label }}{{ upload_form.machine_serial }}</label>
       <label>{{ upload_form.data_file.label }}{{ upload_form.data_file }}</label>
       <button type="submit">上傳 SNP 資料</button>
     </form>
@@ -34,8 +33,7 @@
       <table>
         <thead>
           <tr>
-            <th>伺服器統一流水號</th>
-            <th>機台流水號</th>
+            <th>樣本流水號</th>
             <th>SNP 筆數</th>
             <th>PC</th>
             <th>NC</th>
@@ -48,7 +46,6 @@
           {% for snp in snp_records %}
             <tr class="{% if selected_snp and selected_snp.pk == snp.pk %}selected-row{% endif %}">
               <td>{{ snp.server_serial }}</td>
-              <td>{{ snp.machine_serial }}</td>
               <td>{{ snp.snp_count }}</td>
               <td><span class="check {% if snp.pc_check_passed %}pass{% else %}fail{% endif %}">{% if snp.pc_check_passed %}Pass{% else %}Fail{% endif %}</span></td>
               <td><span class="check {% if snp.nc_check_passed %}pass{% else %}fail{% endif %}">{% if snp.nc_check_passed %}Pass{% else %}Fail{% endif %}</span></td>
@@ -62,7 +59,7 @@
               </td>
             </tr>
           {% empty %}
-            <tr><td colspan="{% if request.user.is_staff %}8{% else %}7{% endif %}">尚未接收 SNP 資料。</td></tr>
+            <tr><td colspan="{% if request.user.is_staff %}7{% else %}6{% endif %}">尚未接收 SNP 資料。</td></tr>
           {% endfor %}
         </tbody>
       </table>

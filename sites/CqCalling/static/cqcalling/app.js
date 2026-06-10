@@ -28,10 +28,8 @@ let lastAnalysis = null;
 init();
 
 function init() {
-  // Build the 40-cycle input grid once, then hydrate it with a demo signal.
   buildCycleInputs();
-  const demoSignals = generateDemoSignals();
-  setSignals(demoSignals);
+  setSignals(generateDemoSignals());
   calculateAndRender();
 
   demoBtn.addEventListener("click", () => {
@@ -42,7 +40,7 @@ function init() {
   applyTextBtn.addEventListener("click", () => {
     const parsed = parseSignalText(signalText.value);
     if (parsed.length !== cycleCount) {
-      showError(`Ë´ãËº∏?•Â?Â•?${cycleCount} ?ãÊï∏?º„ÄÇÁõÆ?çË???${parsed.length} ?ã„ÄÇ`);
+      showError(`Please provide exactly ${cycleCount} numeric values. Parsed ${parsed.length}.`);
       return;
     }
     setSignals(parsed);
@@ -56,7 +54,10 @@ function init() {
     drawEmptyChart();
     setResults(null);
     fitDetails.classList.remove("error");
-    fitDetails.innerHTML = "<p>?¢Á? demo ?ñËº∏??40 ÈªûÊï∏?ºÂ??ãÂ?Ë®àÁ???/p>";
+    fitDetails.innerHTML = "<p>Run a demo or analyze 40 RFU values to calculate the Cq result.</p>";
+    pipeline.innerHTML = "";
+    qcList.innerHTML = "";
+    instrumentOutput.textContent = "{}";
   });
 
   chartTabs.forEach((tab) => {
@@ -66,14 +67,18 @@ function init() {
       if (lastAnalysis) drawChart(lastAnalysis.signals, lastAnalysis);
     });
   });
+
   copyJsonBtn.addEventListener("click", async () => {
     await navigator.clipboard.writeText(instrumentOutput.textContent);
-    copyJsonBtn.textContent = "Â∑≤Ë?Ë£?;
+    copyJsonBtn.textContent = "Copied";
     setTimeout(() => {
-      copyJsonBtn.textContent = "Ë§áË£Ω";
+      copyJsonBtn.textContent = "Copy";
     }, 1200);
   });
-  window.addEventListener("resize", () => calculateAndRender(false));
+
+  window.addEventListener("resize", () => {
+    if (lastAnalysis) drawChart(lastAnalysis.signals, lastAnalysis);
+  });
 }
 
 function buildCycleInputs() {
@@ -113,16 +118,18 @@ function generateDemoSignals(scenario = "normal") {
   const cq = randomBetween(...preset.cq);
   const k = randomBetween(...preset.k);
   const noiseLevel = randomBetween(...preset.noise);
+
   return cycles.map((cycle) => {
     const ideal = baseline + amplitude / (1 + Math.exp(-k * (cycle - cq)));
-    const noise = randomBetween(-noiseLevel, noiseLevel) + (cycle < cq - 7 ? randomBetween(-noiseLevel / 2, noiseLevel / 2) : 0);
+    const baselineNoise = cycle < cq - 7 ? randomBetween(-noiseLevel / 2, noiseLevel / 2) : 0;
+    const noise = randomBetween(-noiseLevel, noiseLevel) + baselineNoise;
     return clamp(ideal + noise, 0, 100);
   });
 }
 
 function parseSignalText(text) {
   return text
-    .split(/[\s,;Ôºå„ÄÅ]+/)
+    .split(/[\s,;]+/)
     .map((value) => value.trim())
     .filter(Boolean)
     .map(Number)
@@ -155,10 +162,9 @@ function syncTextareaFromInputs() {
 }
 
 async function calculateAndRender(updateTextarea = true) {
-  // Core fitting and QC are calculated by Django/Python; JS renders the response.
   const signals = readSignals();
   if (!signals) {
-    showError("ÊØè‰?ÈªûÈÉΩ?ÄË¶ÅÊòØ 0-100 ?ÑÊï∏?º„Ä?);
+    showError("Each cycle value must be a number from 0 to 100.");
     return;
   }
   if (updateTextarea) syncTextareaFromInputs();
@@ -173,7 +179,7 @@ async function calculateAndRender(updateTextarea = true) {
     renderQc(result.qc);
     renderInstrumentOutput(result);
   } catch (error) {
-    showError(error.message || "ÂæåÁ´ØÊºîÁ?Ê≥ïË?ÁÆóÂ§±?ó„Ä?);
+    showError(error.message || "Analysis failed. Please check the input values.");
   }
 }
 
@@ -183,15 +189,17 @@ function sigmoid(x, params) {
 
 function drawEmptyChart() {
   const rect = chart.getBoundingClientRect();
+  const cssWidth = Math.max(720, rect.width || 980);
+  const cssHeight = Math.max(380, cssWidth * 0.56);
   const scale = window.devicePixelRatio || 1;
-  chart.width = Math.max(720, Math.floor(rect.width * scale));
-  chart.height = Math.floor(chart.width * 0.56);
+  chart.width = Math.floor(cssWidth * scale);
+  chart.height = Math.floor(cssHeight * scale);
+  chart.style.height = `${cssHeight}px`;
   ctx.setTransform(scale, 0, 0, scale, 0, 0);
-  ctx.clearRect(0, 0, chart.width, chart.height);
+  ctx.clearRect(0, 0, cssWidth, cssHeight);
 }
 
 function drawChart(signals, fit) {
-  // The chart is intentionally client-side so users can switch views instantly.
   const rect = chart.getBoundingClientRect();
   const cssWidth = Math.max(720, rect.width || 980);
   const cssHeight = Math.max(380, cssWidth * 0.56);
@@ -215,7 +223,8 @@ function drawChart(signals, fit) {
   }
 
   const xScale = (cycle) => padding.left + ((cycle - 1) / 39) * width;
-  const maxY = chartMode === "corrected" ? Math.max(30, Math.ceil(Math.max(...fit.corrected, fit.top - fit.bottom) / 10) * 10) : 110;
+  const maxCorrected = Math.max(...fit.corrected, fit.top - fit.bottom);
+  const maxY = chartMode === "corrected" ? Math.max(30, Math.ceil(maxCorrected / 10) * 10) : 110;
   drawGrid(padding, width, height, cssWidth, cssHeight, maxY);
   const yScale = (value) => padding.top + (1 - clamp(value, 0, maxY) / maxY) * height;
 
@@ -334,9 +343,9 @@ function drawAxisLabels(padding, width, height, cssWidth, cssHeight, yLabel = "F
 
   ctx.textAlign = "right";
   ctx.fillStyle = "#38bdf8";
-  ctx.fillText("?¨Â?Á∑?, cssWidth - padding.right, padding.top + 18);
+  ctx.fillText("Fit curve", cssWidth - padding.right, padding.top + 18);
   ctx.fillStyle = "#0ea5e9";
-  ctx.fillText("?üÂ?Ë®äË?", cssWidth - padding.right, padding.top + 38);
+  ctx.fillText("Observed signal", cssWidth - padding.right, padding.top + 38);
 }
 
 function setResults(result) {
@@ -355,10 +364,19 @@ function setResults(result) {
 
 function showFitDetails(result) {
   fitDetails.classList.remove("error");
+  const cqText = result.reportableCq === null ? "N/A" : formatNumber(result.reportableCq, 2);
+  const failNote = result.reportableCq === null ? ` Raw estimate ${formatNumber(result.cq, 2)} was not reportable because QC failed.` : "";
   fitDetails.innerHTML = `
     <p>
-      4PL sigmoidÔº?strong>Bottom ${formatNumber(result.bottom, 2)}</strong>??      <strong>Top ${formatNumber(result.top, 2)}</strong>??      <strong>k ${formatNumber(result.k, 4)}</strong>??      <strong>Inflection Cycle ${formatNumber(result.x0, 2)}</strong>??      CqÔºà‰?Ê¨°ÂæÆ?ÜÊ?Â§ßÂÄºÔ???<strong>${result.reportableCq === null ? "N/A" : formatNumber(result.reportableCq, 2)}</strong>
-      ${result.reportableCq === null ? `Ôºàraw estimate ${formatNumber(result.cq, 2)}ÔºåQC fail ‰∏çÂ??±Ô?` : ""}Ôº?      inflection cycle ??<strong>${formatNumber(result.cqMaxSlope, 2)}</strong>??    </p>
+      4PL sigmoid:
+      <strong>Bottom ${formatNumber(result.bottom, 2)}</strong>,
+      <strong>Top ${formatNumber(result.top, 2)}</strong>,
+      <strong>k ${formatNumber(result.k, 4)}</strong>,
+      <strong>Inflection Cycle ${formatNumber(result.x0, 2)}</strong>.
+      Reportable Cq: <strong>${cqText}</strong>.
+      ${failNote}
+      Max-slope cycle: <strong>${formatNumber(result.cqMaxSlope, 2)}</strong>.
+    </p>
   `;
 }
 
@@ -448,7 +466,6 @@ function renderQc(qc) {
 }
 
 function renderInstrumentOutput(result) {
-  // Keep the backend payload visible to show how an instrument could consume it.
   instrumentOutput.textContent = JSON.stringify(result.instrumentOutput, null, 2);
 }
 

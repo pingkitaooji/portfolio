@@ -5,9 +5,9 @@ from .models import Patient, Report, RiskAssessment, SNPRecord
 
 @admin.register(SNPRecord)
 class SNPRecordAdmin(admin.ModelAdmin):
-    list_display = ("server_serial", "machine_serial", "created_by", "uploaded_at", "status")
+    list_display = ("server_serial", "created_by", "uploaded_at", "status")
     list_filter = ("status", "created_by", "uploaded_at")
-    search_fields = ("server_serial", "machine_serial", "created_by__username")
+    search_fields = ("server_serial", "created_by__username")
 
 
 @admin.register(Patient)
@@ -27,6 +27,6 @@ class ReportAdmin(admin.ModelAdmin):
 @admin.register(RiskAssessment)
 class RiskAssessmentAdmin(admin.ModelAdmin):
     list_display = ("snp_record", "overall_risk_score", "calculated_at")
-    search_fields = ("snp_record__server_serial", "snp_record__machine_serial")
+    search_fields = ("snp_record__server_serial",)
 
 # Register your models here.

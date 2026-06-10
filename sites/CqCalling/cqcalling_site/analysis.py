@@ -193,7 +193,6 @@ def _instrument_output(fit, cq, reportable_cq, ir, r2, qc):
         "input_range": "0-100 RFU",
         "cq_value": None if reportable_cq is None else _round(reportable_cq, 3),
         "raw_cq_estimate": _round(cq, 3),
-        "cq_method": "second_derivative_maximum",
         "inflection_cycle": _round(fit["x0"], 3),
         "ir": _round(ir, 4),
         "r_squared": _round(r2, 5),

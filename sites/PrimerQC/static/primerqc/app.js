@@ -1,32 +1,5 @@
 const STORAGE_KEY = "primerqc_primer_records";
 
-const demoPrimers = [
-  {
-    assayId: "PRIMER-DEMO-001",
-    ampliconLength: 142,
-    forward: "GCTGACCTGAAGTTCATCTGC",
-    reverse: "CAGGTTGATGGTGATGGTGAA",
-    status: "pass",
-    note: "Demo: Ct stable, single peak"
-  },
-  {
-    assayId: "PRIMER-DEMO-002",
-    ampliconLength: 96,
-    forward: "ATGCGCGCGCGTATATATAT",
-    reverse: "ATATATACGCGCGCGCATAT",
-    status: "fail",
-    note: "Demo: high dimer risk"
-  },
-  {
-    assayId: "PRIMER-DEMO-003",
-    ampliconLength: 284,
-    forward: "TACAGCTGATGACCTTGGCA",
-    reverse: "ACCTTGACTGACCGTTAGCA",
-    status: "untested",
-    note: "Demo: pending validation"
-  }
-];
-
 let latestResult = null;
 
 const $ = (id) => document.getElementById(id);
@@ -37,15 +10,14 @@ function sanitizeSequence(value) {
 
 function validateInputs(forward, reverse) {
   if (forward.length < 12 || reverse.length < 12) {
-    throw new Error("Forward / reverse primer 至少需要 12 bp。");
+    throw new Error("Forward and reverse primers must be at least 12 bp.");
   }
   if (forward.length > 35 || reverse.length > 35) {
-    throw new Error("Demo 模型建議輸入 35 bp 以內的 primer。");
+    throw new Error("Demo input supports primers up to 35 bp.");
   }
 }
 
 function renderResult(result) {
-  // The result object is returned by Django/Python; JS only formats it for review.
   const score = Math.round(result.prediction.probability_usable * 100);
   $("scoreValue").textContent = `${score}%`;
   $("predictionLabel").textContent = `${result.prediction.label} - ${result.prediction.reasons[0]}`;
@@ -68,25 +40,25 @@ function renderResult(result) {
     ["3-prime GC", `${f.three_prime_gc_percent}%`, `${r.three_prime_gc_percent}%`],
     ["Self complementarity", f.self_complementarity, r.self_complementarity],
     ["Hairpin proxy", f.hairpin_proxy, r.hairpin_proxy],
-    ["Max homopolymer", f.max_homopolymer, r.max_homopolymer]
+    ["Max homopolymer", f.max_homopolymer, r.max_homopolymer],
   ];
 
   $("featureRows").innerHTML = rows
     .map(([name, fv, rv]) => `<tr><td>${name}</td><td>${fv}</td><td>${rv}</td></tr>`)
     .join("");
-  $("jsonOutput").textContent = JSON.stringify(result, null, 2);
 }
 
 function makeRecord() {
-  // Browser storage keeps demo validation notes without requiring a backend database.
-  if (!latestResult) throw new Error("請先完成一次模型預測。");
+  if (!latestResult) throw new Error("Please run a primer prediction before saving a record.");
+  const validationStatus = $("validationStatus");
+  const validationNote = $("validationNote");
   return {
     id: crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}`,
     assay_id: $("assayId").value.trim() || "ASSAY-UNNAMED",
     created_at: new Date().toISOString(),
-    validation_status: $("validationStatus").value,
-    validation_note: $("validationNote").value.trim(),
-    result: latestResult
+    validation_status: validationStatus ? validationStatus.value : "not_recorded",
+    validation_note: validationNote ? validationNote.value.trim() : "",
+    result: latestResult,
   };
 }
 
@@ -103,13 +75,16 @@ function saveRecords(records) {
 }
 
 function renderRecords() {
+  const recordsList = $("recordsList");
+  if (!recordsList) return;
+
   const records = loadRecords();
   if (!records.length) {
-    $("recordsList").textContent = "尚無紀錄";
+    recordsList.textContent = "No records yet";
     return;
   }
 
-  $("recordsList").innerHTML = records.map((record) => {
+  recordsList.innerHTML = records.map((record) => {
     const score = Math.round(record.result.prediction.probability_usable * 100);
     const created = new Date(record.created_at).toLocaleString("zh-TW");
     return `
@@ -125,7 +100,6 @@ function renderRecords() {
 }
 
 function renderModelBenchmark() {
-  // Benchmark metrics are static output from the model-building experiment.
   const results = window.PRIMER_MODEL_RESULTS;
   const modelName = $("activeModelName");
   const summary = $("modelDatasetSummary");
@@ -135,18 +109,18 @@ function renderModelBenchmark() {
 
   if (!results) {
     if (modelName) modelName.textContent = "Python demo";
-    if (summary) summary.textContent = "尚未找到模型結果檔。";
+    if (summary) summary.textContent = "Model benchmark data is not loaded.";
     return;
   }
 
   const best = results.best_model;
   const dataset = results.dataset;
   if (modelName) modelName.textContent = best.display_name;
-  summary.textContent = `${dataset.source_file}，共 ${dataset.row_count} 筆；訓練 ${dataset.train_count} 筆、測試 ${dataset.test_count} 筆；success/fail = ${dataset.class_distribution.success}/${dataset.class_distribution.fail}`;
+  summary.textContent = `${dataset.source_file}, rows ${dataset.row_count}, train ${dataset.train_count}, test ${dataset.test_count}, success/fail = ${dataset.class_distribution.success}/${dataset.class_distribution.fail}`;
   bestCard.innerHTML = `
     <span>Best Model</span>
     <strong>${best.display_name}</strong>
-    <p>${best.selection_rule}。目前保存 artifact：${best.artifact}。</p>
+    <p>${best.selection_rule}. Artifact: ${best.artifact}</p>
   `;
   rows.innerHTML = results.models.map((model) => {
     const metrics = model.metrics;
@@ -168,7 +142,7 @@ function renderModelBenchmark() {
   importance.innerHTML = `
     <div class="section-head compact-head">
       <p>Top Features</p>
-      <h2>最佳模型主要使用特徵</h2>
+      <h2>Most influential model features</h2>
     </div>
     <div class="feature-chip-list">
       ${best.top_features.map((item) => `<span>${item.feature}<strong>${item.importance}</strong></span>`).join("")}
@@ -180,20 +154,23 @@ function formatMetric(value) {
   return Number(value).toFixed(3);
 }
 
-$("demoButton").addEventListener("click", () => {
-  const demo = demoPrimers[Math.floor(Math.random() * demoPrimers.length)];
-  $("assayId").value = demo.assayId;
-  $("ampliconLength").value = demo.ampliconLength;
-  $("forwardPrimer").value = demo.forward;
-  $("reversePrimer").value = demo.reverse;
-  $("validationStatus").value = demo.status;
-  $("validationNote").value = demo.note;
+$("demoButton").addEventListener("click", async () => {
+  try {
+    const demo = await getJson("/api/demo/");
+    $("assayId").value = demo.assayId;
+    $("ampliconLength").value = demo.ampliconLength;
+    $("forwardPrimer").value = demo.forward;
+    $("reversePrimer").value = demo.reverse;
+    if ($("validationStatus")) $("validationStatus").value = demo.status;
+    if ($("validationNote")) $("validationNote").value = demo.note;
+  } catch (error) {
+    alert(error.message);
+  }
 });
 
 $("primerForm").addEventListener("submit", async (event) => {
   event.preventDefault();
   try {
-    // Primer feature extraction and scoring happen in the Django endpoint.
     const forward = sanitizeSequence($("forwardPrimer").value);
     const reverse = sanitizeSequence($("reversePrimer").value);
     const ampliconLength = Number($("ampliconLength").value || 0);
@@ -209,24 +186,37 @@ $("primerForm").addEventListener("submit", async (event) => {
   }
 });
 
-$("saveRecordButton").addEventListener("click", () => {
-  try {
-    const records = loadRecords();
-    records.unshift(makeRecord());
-    saveRecords(records.slice(0, 20));
-    renderRecords();
-  } catch (error) {
-    alert(error.message);
-  }
-});
+if ($("saveRecordButton")) {
+  $("saveRecordButton").addEventListener("click", () => {
+    try {
+      const records = loadRecords();
+      records.unshift(makeRecord());
+      saveRecords(records.slice(0, 20));
+      renderRecords();
+    } catch (error) {
+      alert(error.message);
+    }
+  });
+}
 
-$("clearRecordsButton").addEventListener("click", () => {
-  saveRecords([]);
-  renderRecords();
-});
+if ($("clearRecordsButton")) {
+  $("clearRecordsButton").addEventListener("click", () => {
+    saveRecords([]);
+    renderRecords();
+  });
+}
 
 renderRecords();
 renderModelBenchmark();
+
+async function getJson(url) {
+  const response = await fetch(url);
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || `HTTP ${response.status}`);
+  }
+  return data;
+}
 
 async function postJson(url, payload) {
   const response = await fetch(url, {

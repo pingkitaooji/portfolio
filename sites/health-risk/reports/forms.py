@@ -6,10 +6,7 @@ from .models import Patient, SNPRecord
 class SNPUploadForm(forms.ModelForm):
     class Meta:
         model = SNPRecord
-        fields = ["machine_serial", "data_file"]
-        widgets = {
-            "machine_serial": forms.TextInput(attrs={"placeholder": "例如：MC-8F2A-4410"}),
-        }
+        fields = ["data_file"]
 
 
 class PatientReportForm(forms.Form):
@@ -27,7 +24,7 @@ class PatientReportForm(forms.Form):
     snp_record = forms.ModelChoiceField(
         label="對應 SNP 資料",
         queryset=SNPRecord.objects.none(),
-        empty_label="請選擇伺服器流水號",
+        empty_label="請選擇樣本流水號",
     )
 
     def __init__(self, *args, user=None, **kwargs):

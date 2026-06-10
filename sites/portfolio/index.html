@@ -3,15 +3,14 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hung Lin | 作品集</title>
-    <link rel="stylesheet" href="styles.css?v=20260609-skills-title">
+    <title>Hung Lin | Portfolio</title>
+    <link rel="stylesheet" href="styles.css?v=20260610-hero-projects">
   </head>
   <body>
     <header class="topbar">
       <a class="brand" href="#top">Hung Lin</a>
-      <nav aria-label="作品集導覽">
+      <nav aria-label="Portfolio navigation">
         <a href="#about">Home</a>
-        <a href="#projects">Projects</a>
         <a href="#skills">Skills</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -21,72 +20,68 @@
       <section class="hero" id="about">
         <div class="hero-copy">
           <p class="intro-line">Hello, I'm Hung Lin</p>
-          <span class="intro-en">Data Engineer / Bioinformatics Engineer with 4+ years of experience in biomedical data analysis and workflow automation, skilled in engineering laboratory data workflows into practical production systems.</span>
-          <span class="intro-zh">數據工程師／生物資訊工程師，具備 4 年以上生醫數據分析與流程自動化經驗，擅長將實驗室數據流程工程化並導入實際系統。</span>
+          <span class="intro-en">Data Engineer / Bioinformatics Engineer with 4+ years of experience in biomedical data analysis and workflow automation. I specialize in transforming laboratory data workflows into reliable, scalable, and production-ready analysis systems.</span>
+          <span class="intro-zh">具備 4 年以上生醫資料分析與流程自動化經驗，專注於將 qPCR、SNP、NGS、TGS影像等實驗資料流程轉換為可維運、可擴充的分析系統與自動化報告流程。</span>
           <div class="hero-actions">
-            <a class="primary" href="#projects">查看專案</a>
-            <a class="secondary" href="#contact">聯絡我</a>
+            <a class="primary" href="https://github.com/pingkitaooji/portfolio" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="secondary" href="#contact">Contact</a>
           </div>
+          <section class="profile-panel focus-panel" aria-label="Experience focus">
+            <h1>Experience Focus</h1>
+            <div class="profile-list">
+              <div><strong>Biomedical Data Workflow</strong><small>qPCR、SNP、NGS 與實驗室數據流程自動化</small></div>
+              <div><strong>Reporting System</strong><small>健康風險評估報告、資料驗證與自助式報告產出</small></div>
+              <div><strong>Algorithm Engineering</strong><small>TGS 影像訊號處理、qPCR 訊號處理、Cq Calling 及曲線擬合分析</small></div>
+              <div><strong>System Integration</strong><small>Python、PHP / Laravel、Linux、AWS 與內部平台維運</small></div>
+            </div>
+          </section>
         </div>
 
-        <aside class="profile-panel" aria-label="經歷摘要">
-          <h1>Experience Focus</h1>
-          <div class="profile-list">
-            <div><strong>Biomedical Data Workflow</strong><small>qPCR、SNP、NGS 與實驗室數據流程自動化</small></div>
-            <div><strong>Reporting System</strong><small>健康風險評估報告、資料驗證與自助式報告產出</small></div>
-            <div><strong>Algorithm Engineering</strong><small>TGS 影像訊號處理、qPCR 訊號處理、Cq Calling 及曲線擬合分析</small></div>
-            <div><strong>System Integration</strong><small>Python、PHP / Laravel、Linux、AWS 與內部平台維運</small></div>
+        <aside class="project-panel" id="projects" aria-label="Featured projects">
+          <div class="experience-head">
+            <h2>PROJECTS</h2>
+          </div>
+          <div class="experience-list hero-project-list">
+            <article class="experience-item" id="health-risk">
+              <img class="project-visual" src="assets/medical-genetics-hero.png" alt="健康風險評估報告系統示意圖">
+              <div class="experience-copy">
+                <span>健康風險評估報告系統</span>
+                <h3>Health Risk Assessment Report System</h3>
+                <strong>Django / Medical Report Workflow</strong>
+                <p>雲端醫療報告平台，醫療院所人員可透過網頁上傳機台產生的 SNP資料，設定基本資訊與報告參數，並以最少人工操作自動產生對應的檢測報告。</p>
+                <div class="project-links">
+                  <a class="site-link" href="http://health.yourdomain.com" data-local-url="http://127.0.0.1:8000/login/">Live Demo</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="experience-item" id="cqcalling">
+              <img class="project-visual" src="assets/cqcalling-hero.png" alt="CqCalling qPCR 訊號分析示意圖">
+              <div class="experience-copy">
+                <span>即時定量聚合酶連鎖反應訊號分析平台</span>
+                <h3>qPCR Signal Analysis Platform</h3>
+                <strong>Python Algorithm / Instrument Signal Analysis</strong>
+                <p>此平台用於展示 qPCR Cq Calling 與曲線擬合分析流程，提供原始訊號視覺化、訊號品質檢查與分析結果輸出功能，作為演算法模組銜接邊緣裝置訊號處理流程展示。</p>
+                <div class="project-links">
+                  <a class="site-link" href="http://cqcalling.yourdomain.com" data-local-url="http://127.0.0.1:8002/">Live Demo</a>
+                </div>
+              </div>
+            </article>
+
+            <article class="experience-item" id="primerqc">
+              <img class="project-visual" src="assets/primerqc-hero.png" alt="PrimerQC primer 預測模型示意圖">
+              <div class="experience-copy">
+                <span>引子成功率預測</span>
+                <h3>Primer Success Prediction</h3>
+                <strong>Model Validation / Primer Success Prediction</strong>
+                <p>訓練並比較五種機器學習模型，選擇表現最佳模型作為 primer pair 成功率預測模組。使用者可輸入 forward / reverse primer 序列，系統即時預測上機成功率，並保存測試結果作為後續資料蒐集與模型優化依據。</p>
+                <div class="project-links">
+                  <a class="site-link" href="http://primerqc.yourdomain.com" data-local-url="http://127.0.0.1:8003/">Live Demo</a>
+                </div>
+              </div>
+            </article>
           </div>
         </aside>
-      </section>
-
-      <section id="projects" class="section">
-        <div class="experience-head">
-          <h2>PROJECTS</h2>
-        </div>
-        <div class="experience-list">
-          <article class="experience-item">
-            <img class="project-visual" src="assets/medical-genetics-hero.png" alt="健康風險評估報告系統示意圖">
-            <div class="experience-copy">
-              <span>Health Risk Assessment Report System</span>
-              <h3>健康風險評估報告系統</h3>
-              <strong>Django / Medical Report Workflow</strong>
-              <p>雲端醫療報告平台，醫療院所人員可透過網頁上傳機台產生的 SNP資料，設定基本資訊與報告參數，並以最少人工操作自動產生對應的檢測報告。</p>
-              <div class="project-links">
-                <a class="site-link" href="http://health.yourdomain.com" data-local-url="http://127.0.0.1:8000/login/">Live Demo</a>
-                <a href="https://github.com/pingkitaooji/portfolio" target="_blank" rel="noreferrer">GitHub</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="experience-item reverse">
-            <img class="project-visual" src="assets/cqcalling-hero.png" alt="CqCalling qPCR 訊號分析示意圖">
-            <div class="experience-copy">
-              <span>CqCalling</span>
-              <h3>qPCR Cq Calling Engine</h3>
-              <strong>Python Algorithm / Instrument Signal Analysis</strong>
-              <p>此平台用於展示 qPCR Cq Calling 與曲線擬合分析流程，提供原始訊號視覺化、訊號品質檢查與分析結果輸出功能，作為演算法模組銜接儀器訊號處理流程展示。</p>
-              <div class="project-links">
-                <a class="site-link" href="http://cqcalling.yourdomain.com" data-local-url="http://127.0.0.1:8002/">Live Demo</a>
-                <a href="https://github.com/pingkitaooji/portfolio" target="_blank" rel="noreferrer">GitHub</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="experience-item">
-            <img class="project-visual" src="assets/primerqc-hero.png" alt="PrimerQC primer 預測模型示意圖">
-            <div class="experience-copy">
-              <span>PrimerQC</span>
-              <h3>Primer Pair Quality Prediction</h3>
-              <strong>Model Validation / Primer Success Prediction</strong>
-              <p>訓練並比較五種機器學習模型，選擇表現最佳模型作為 primer pair 成功率預測模組。使用者可輸入 forward / reverse primer 序列，系統即時預測上機成功率，並保存測試結果作為後續資料蒐集與模型優化依據。</p>
-              <div class="project-links">
-                <a class="site-link" href="http://primerqc.yourdomain.com" data-local-url="http://127.0.0.1:8003/">Live Demo</a>
-                <a href="https://github.com/pingkitaooji/portfolio" target="_blank" rel="noreferrer">GitHub</a>
-              </div>
-            </div>
-          </article>
-        </div>
       </section>
 
       <section id="skills" class="section split">
@@ -103,8 +98,11 @@
 
       <section id="contact" class="section contact">
         <p>Contact</p>
-        <h2>如果你想了解更多專案細節，歡迎與我聯絡。</h2>
-        <a class="mail-button" href="mailto:your.email@example.com?subject=Portfolio%20Contact">寄信給我</a>
+
+        <a class="mail-button" href="https://mail.google.com/mail/?view=cm&fs=1&to=linghoun@gmail.com&su=Portfolio%20Contact" target="_blank" rel="noreferrer" aria-label="Email linghoun@gmail.com">
+          <span aria-hidden="true">✉</span>
+          <strong>linghoun@gmail.com</strong>
+        </a>
       </section>
     </main>
     <script src="dev-links.js"></script>

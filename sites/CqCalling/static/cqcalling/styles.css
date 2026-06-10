@@ -100,7 +100,7 @@ nav a {
   color: #fff;
   display: grid;
   gap: clamp(1rem, 4vw, 3rem);
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 390px);
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
   min-height: 470px;
   overflow: hidden;
   padding: clamp(2rem, 6vw, 5rem) clamp(1rem, 4vw, 3rem);
@@ -133,7 +133,7 @@ nav a {
 }
 
 .hero p,
-.hero-card span,
+.hero-card > span,
 .panel-head p {
   color: #cffafe;
   font-size: 0.78rem;
@@ -141,6 +141,10 @@ nav a {
   letter-spacing: 0.1em;
   margin: 0 0 0.7rem;
   text-transform: uppercase;
+}
+
+.hero p {
+  font-size: 1rem;
 }
 
 .hero h1 {
@@ -167,6 +171,10 @@ nav a {
   border-radius: 8px;
   box-shadow: var(--shadow);
   color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 430px;
   padding: 1.35rem;
   position: relative;
   z-index: 1;
@@ -178,15 +186,46 @@ nav a {
 
 .hero-card p {
   color: var(--muted);
-  font-size: 0.98rem;
+  font-size: 1rem;
+  font-weight: 900;
   letter-spacing: 0;
-  line-height: 1.75;
-  margin-top: 0.9rem;
+  line-height: 1.7;
+  margin: 0.8rem 0 1rem;
   text-transform: none;
 }
 
-.hero-card span {
-  color: var(--teal-dark);
+.hero-card > span {
+  color: var(--muted);
+  display: block;
+  font-size: 1.08rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  line-height: 1.8;
+  margin: 1.2rem 0 0.7rem;
+  text-transform: uppercase;
+}
+
+.hero-card div {
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.8rem 0;
+  width: 100%;
+}
+
+.hero-card strong {
+  color: var(--teal);
+  font-size: 1rem;
+}
+
+.hero-card div span {
+  color: var(--muted);
+  font-size: 1.08rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.8;
+  margin: 1.2rem 0 0;
+  text-transform: none;
 }
 
 .app-shell {

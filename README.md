@@ -7,7 +7,7 @@ This repository is a Dockerized portfolio workspace that contains one portfolio 
 | Path | Site | Description |
 | --- | --- | --- |
 | `sites/portfolio` | Portfolio | Personal introduction, project showcase, skills, and contact entry page. |
-| `sites/health-risk` | Health Risk Assessment Report System | Django system for SNP upload, patient records, risk calculation, PDF report storage, and role-based access control. |
+| `sites/health-risk` | Health Risk Assessment Report System | Django system for SNP upload, automatic sample serial assignment, patient records, risk calculation, PDF report storage, and role-based access control. |
 | `sites/CqCalling` | CqCalling | Django + Python qPCR signal analysis demo for 40-cycle fluorescence input, sigmoid fitting, Cq calling, QC metrics, and JSON output. |
 | `sites/PrimerQC` | PrimerQC | Django + Python primer pair quality prediction demo using Primer3-style features and a pre-trained model artifact. |
 
@@ -72,6 +72,8 @@ hospital_a / demo123
 hospital_b / demo123
 hospital_c / demo123
 ```
+
+The Health Risk login page is pre-filled with `clinic_admin / demo123` for demo use. SNP uploads now use an automatically assigned sample serial number and do not require an instrument code field.
 
 ## Domain Layout
 

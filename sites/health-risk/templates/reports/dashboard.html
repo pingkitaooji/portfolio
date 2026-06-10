@@ -38,7 +38,7 @@
           <article>
             <strong>{{ snp.server_serial }}</strong>
             <span>
-              {{ snp.machine_serial }} / {{ snp.snp_count }} SNP / PC {% if snp.pc_check_passed %}Pass{% else %}Fail{% endif %} / NC {% if snp.nc_check_passed %}Pass{% else %}Fail{% endif %}
+              {{ snp.snp_count }} SNP / PC {% if snp.pc_check_passed %}Pass{% else %}Fail{% endif %} / NC {% if snp.nc_check_passed %}Pass{% else %}Fail{% endif %}
               {% if request.user.is_staff %} / 建立者：{{ snp.created_by.username|default:"未指定" }}{% endif %}
             </span>
           </article>
@@ -61,7 +61,7 @@
           <article>
             <strong>{{ snp.server_serial }}</strong>
             <span>
-              {{ snp.uploaded_at|date:"Y-m-d H:i" }} / {{ snp.machine_serial }} / {{ snp.get_status_display }}
+              {{ snp.uploaded_at|date:"Y-m-d H:i" }} / {{ snp.get_status_display }}
               {% if request.user.is_staff %} / 建立者：{{ snp.created_by.username|default:"未指定" }}{% endif %}
             </span>
           </article>

@@ -31,7 +31,6 @@ class ReportWorkflowTests(TestCase):
         response = self.client.post(
             reverse("snp_upload_api"),
             {
-                "machine_serial": "MC-TEST-0001",
                 "data_file": upload,
             },
         )
@@ -72,7 +71,6 @@ class ReportWorkflowTests(TestCase):
         second = SNPRecord.objects.exclude(pk=first.pk).get()
         second_content = second.data_file.read()
 
-        self.assertNotEqual(first.machine_serial, second.machine_serial)
         self.assertNotEqual(first_content, second_content)
 
     def test_snp_page_shows_file_content_risk_and_patient_form(self):
@@ -82,11 +80,10 @@ class ReportWorkflowTests(TestCase):
         self.client.post(
             reverse("snp_records"),
             {
-                "machine_serial": "MC-TEST-0002",
                 "data_file": upload,
             },
         )
-        snp = SNPRecord.objects.get(machine_serial="MC-TEST-0002")
+        snp = SNPRecord.objects.get()
         response = self.client.get(f"{reverse('snp_records')}?selected={snp.pk}")
 
         self.assertContains(response, "解析出的 SNP")

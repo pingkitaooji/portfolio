@@ -19,8 +19,9 @@ services:
 
   web:
     build: ./sites/health-risk
-    command: gunicorn healthrisk.wsgi:application --bind 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000
     volumes:
+      - ./sites/health-risk:/app
       - media_data:/app/media
     ports:
       - "8000:8000"
@@ -31,13 +32,17 @@ services:
 
   cqcalling:
     build: ./sites/CqCalling
-    command: gunicorn cqcalling_site.wsgi:application --bind 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./sites/CqCalling:/app
     ports:
       - "8002:8000"
 
   primerqc:
     build: ./sites/PrimerQC
-    command: gunicorn primerqc_site.wsgi:application --bind 0.0.0.0:8000
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./sites/PrimerQC:/app
     ports:
       - "8003:8000"
 

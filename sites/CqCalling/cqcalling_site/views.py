@@ -13,7 +13,7 @@ def analyze(request):
         payload = json.loads(request.body.decode("utf-8"))
         result = analyze_signals(payload.get("signals"))
     except json.JSONDecodeError:
-        return JsonResponse({"error": "請提供有效的 JSON。"}, status=400)
+        return JsonResponse({"error": "Invalid JSON payload."}, status=400)
     except ValueError as exc:
         return JsonResponse({"error": str(exc)}, status=400)
     return JsonResponse(result)

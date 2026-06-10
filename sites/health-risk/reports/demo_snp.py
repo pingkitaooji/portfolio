@@ -14,7 +14,7 @@ GENOTYPES = ["AA", "AC", "AG", "AT", "CC", "CG", "CT", "GG", "GT", "TT"]
 def create_demo_snp_record(user=None):
     nonce = random.randint(1000, 9999)
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-    record = SNPRecord(machine_serial=f"DEMO-MC-{timestamp}-{nonce}", created_by=user)
+    record = SNPRecord(created_by=user)
     content = build_random_demo_snp_csv()
     record.data_file.save(
         f"demo_snp_{timestamp}_{nonce}.csv",

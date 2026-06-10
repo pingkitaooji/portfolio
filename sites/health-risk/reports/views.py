@@ -77,9 +77,9 @@ def snp_records(request):
                 snp_record.save()
                 update_snp_checks(snp_record)
                 calculate_and_store_risk(snp_record)
-                messages.success(request, f"SNP 資料已保存，系統給予統一流水號：{snp_record.server_serial}")
+                messages.success(request, f"SNP 資料已保存，樣本流水號：{snp_record.server_serial}")
                 return redirect(f"{reverse('snp_records')}?selected={snp_record.pk}")
-            messages.error(request, "SNP 上傳失敗，請確認機台流水號與檔案已填寫。")
+            messages.error(request, "SNP 上傳失敗，請確認檔案已填寫。")
 
     snp_records_qs = snp_queryset_for_user(request.user)
     selected_record = selected_snp_record(selected_id, snp_records_qs)
@@ -278,8 +278,8 @@ def snp_upload_api(request):
     if request.method == "GET":
         return JsonResponse(
             {
-                "message": "POST machine_serial and data_file to upload SNP data. The server_serial is assigned after upload.",
-                "required_fields": ["machine_serial", "data_file"],
+                "message": "POST data_file to upload SNP data. The server_serial is assigned after upload.",
+                "required_fields": ["data_file"],
                 "assigned_field": "server_serial",
             }
         )
@@ -295,7 +295,6 @@ def snp_upload_api(request):
         {
             "ok": True,
             "server_serial": snp_record.server_serial,
-            "machine_serial": snp_record.machine_serial,
             "uploaded_at": snp_record.uploaded_at.isoformat(),
             "snp_count": inspection["snp_count"],
             "pc_check_passed": inspection["pc_check_passed"],

@@ -84,7 +84,6 @@ nav a {
 .hero p,
 .workspace-head p,
 .section-head p,
-.architecture p,
 .panel-kicker {
   color: #075985;
   display: block;
@@ -104,6 +103,7 @@ nav a {
 
 .hero p {
   color: #cffafe;
+  font-size: 1rem;
 }
 
 .hero span {
@@ -119,7 +119,6 @@ nav a {
 .primer-form,
 .result-panel,
 .records-section,
-.architecture,
 .model-validation {
   background: var(--panel);
   border: 1px solid var(--line);
@@ -135,15 +134,18 @@ nav a {
 
 .model-summary h2,
 .workspace-head h2,
-.section-head h2,
-.architecture h2 {
+.section-head h2 {
   margin: 0;
 }
 
 .model-summary p {
   color: var(--muted);
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0;
   line-height: 1.7;
   margin: 0.8rem 0 1rem;
+  text-transform: none;
 }
 
 .model-summary div {
@@ -229,7 +231,6 @@ button:hover {
 .primer-form,
 .result-panel,
 .records-section,
-.architecture,
 .model-validation {
   padding: 1.2rem;
 }
@@ -320,19 +321,7 @@ button:hover {
   text-transform: uppercase;
 }
 
-pre {
-  background: #f8fafc;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  color: #334155;
-  max-height: 260px;
-  overflow: auto;
-  padding: 1rem;
-  white-space: pre-wrap;
-}
-
 .records-section,
-.architecture,
 .model-validation {
   margin-top: 1rem;
 }
@@ -470,18 +459,6 @@ pre {
   margin-top: 0.2rem;
 }
 
-.architecture {
-  align-items: start;
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: minmax(220px, 0.75fr) minmax(0, 1fr);
-}
-
-.architecture ol {
-  line-height: 1.85;
-  margin: 0;
-}
-
 @media (max-width: 900px) {
   .topbar,
   .workspace-head {
@@ -491,8 +468,7 @@ pre {
   }
 
   .hero,
-  .prediction-grid,
-  .architecture {
+  .prediction-grid {
     grid-template-columns: 1fr;
   }
 
