@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  django-checks:
+    name: Django checks and tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Prepare local environment
+        run: cp .env.example .env
+
+      - name: Build application images
+        run: docker compose build
+
+      - name: Start database
+        run: docker compose up -d db
+
+      - name: Check Health Risk app
+        run: docker compose run --rm web python manage.py check
+
+      - name: Check CqCalling app
+        run: docker compose run --rm cqcalling python manage.py check
+
+      - name: Check PrimerQC app
+        run: docker compose run --rm primerqc python manage.py check
+
+      - name: Test Health Risk reports
+        run: docker compose run --rm web python manage.py test reports
+
+      - name: Stop services
+        if: always()
+        run: docker compose down -v
+

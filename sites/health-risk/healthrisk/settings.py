@@ -32,6 +32,11 @@ CSRF_TRUSTED_ORIGINS = [
     for origin in os.getenv("DJANGO_CSRF_TRUSTED_ORIGINS", "").split(",")
     if origin.strip()
 ]
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_SSL_REDIRECT = os.getenv("DJANGO_SECURE_SSL_REDIRECT", "0") == "1"
+SESSION_COOKIE_SECURE = os.getenv("DJANGO_SESSION_COOKIE_SECURE", "0") == "1"
+CSRF_COOKIE_SECURE = os.getenv("DJANGO_CSRF_COOKIE_SECURE", "0") == "1"
+X_FRAME_OPTIONS = "DENY"
 
 
 # Application definition
@@ -155,6 +160,9 @@ LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "dashboard"
 LOGOUT_REDIRECT_URL = "login"
 CSRF_FAILURE_VIEW = "reports.csrf.csrf_failure_view"
+DEMO_LOGIN_PREFILL = os.getenv("DJANGO_DEMO_LOGIN_PREFILL", "1" if DEBUG else "0") == "1"
+DEMO_LOGIN_USERNAME = os.getenv("DJANGO_DEMO_LOGIN_USERNAME", "clinic_admin")
+DEMO_LOGIN_PASSWORD = os.getenv("DJANGO_DEMO_LOGIN_PASSWORD", "demo123")
 
 LOGGING = {
     "version": 1,

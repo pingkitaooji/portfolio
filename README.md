@@ -73,7 +73,15 @@ hospital_b / demo123
 hospital_c / demo123
 ```
 
-The Health Risk login page is pre-filled with `clinic_admin / demo123` for demo use. SNP uploads now use an automatically assigned sample serial number and do not require an instrument code field.
+The Health Risk login page can be pre-filled with `clinic_admin / demo123` for local demo use. Disable this in production with `DJANGO_DEMO_LOGIN_PREFILL=0`. SNP uploads use an automatically assigned sample serial number and do not require an instrument code field.
+
+## Deployment
+
+Production preparation files are included:
+
+- `docker-compose.prod.yml` runs the Django apps with Gunicorn.
+- `.env.production.example` lists the required production environment variables.
+- `DEPLOYMENT.md` contains the AWS Lightsail/VPS deployment and CI/CD checklist.
 
 ## Domain Layout
 

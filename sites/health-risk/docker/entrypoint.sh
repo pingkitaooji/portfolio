@@ -28,7 +28,8 @@ print(f'Superuser ready: {username}')
 "
 fi
 
-python manage.py shell --interface python -c "
+if [ "${CREATE_DEMO_USERS:-1}" = "1" ]; then
+  python manage.py shell --interface python -c "
 from django.contrib.auth import get_user_model
 User = get_user_model()
 accounts = [
@@ -45,5 +46,6 @@ for username, email, password in accounts:
     user.save()
     print(f'Hospital user ready: {username}')
 "
+fi
 
 exec "$@"

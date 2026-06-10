@@ -1,0 +1,57 @@
+services:
+  reverse-proxy:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./infrastructure/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - media_data:/srv/health-media:ro
+    depends_on:
+      - portfolio
+      - web
+      - cqcalling
+      - primerqc
+
+  portfolio:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    volumes:
+      - ./sites/portfolio:/usr/share/nginx/html:ro
+
+  web:
+    build: ./sites/health-risk
+    restart: unless-stopped
+    command: gunicorn healthrisk.wsgi:application --bind 0.0.0.0:8000 --workers 2 --timeout 60
+    volumes:
+      - media_data:/app/media
+    env_file:
+      - .env.production
+    depends_on:
+      - db
+
+  cqcalling:
+    build: ./sites/CqCalling
+    restart: unless-stopped
+    command: gunicorn cqcalling_site.wsgi:application --bind 0.0.0.0:8000 --workers 2 --timeout 60
+    env_file:
+      - .env.production
+
+  primerqc:
+    build: ./sites/PrimerQC
+    restart: unless-stopped
+    command: gunicorn primerqc_site.wsgi:application --bind 0.0.0.0:8000 --workers 2 --timeout 90
+    env_file:
+      - .env.production
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env.production
+
+volumes:
+  postgres_data:
+  media_data:

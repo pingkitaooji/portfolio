@@ -14,6 +14,11 @@ ALLOWED_HOSTS = [
     ).split(",")
     if host.strip()
 ]
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+SECURE_SSL_REDIRECT = os.getenv("PRIMERQC_SECURE_SSL_REDIRECT", "0") == "1"
+SESSION_COOKIE_SECURE = os.getenv("PRIMERQC_SESSION_COOKIE_SECURE", "0") == "1"
+CSRF_COOKIE_SECURE = os.getenv("PRIMERQC_CSRF_COOKIE_SECURE", "0") == "1"
+X_FRAME_OPTIONS = "DENY"
 
 INSTALLED_APPS = [
     "django.contrib.staticfiles",

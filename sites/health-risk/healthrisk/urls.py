@@ -25,7 +25,14 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path(
         "login/",
-        auth_views.LoginView.as_view(template_name="registration/login.html"),
+        auth_views.LoginView.as_view(
+            template_name="registration/login.html",
+            extra_context={
+                "demo_login_prefill": settings.DEMO_LOGIN_PREFILL,
+                "demo_login_username": settings.DEMO_LOGIN_USERNAME,
+                "demo_login_password": settings.DEMO_LOGIN_PASSWORD,
+            },
+        ),
         name="login",
     ),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
