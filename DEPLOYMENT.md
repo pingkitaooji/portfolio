@@ -122,6 +122,8 @@ The repository includes GitHub Actions for the basic production workflow:
 feature branch -> pull request -> CI passes -> merge main -> deploy to Lightsail
 ```
 
+For the full step-by-step workflow, see `CI_CD_FLOW.md`.
+
 ### CI
 
 `.github/workflows/ci.yml` runs on pull requests and pushes to `main`.
