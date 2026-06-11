@@ -116,10 +116,11 @@ db             PostgreSQL
 Domain routing is planned as:
 
 ```text
-www.yourdomain.com         Portfolio
-health.yourdomain.com      Health Risk Assessment Report System
-cqcalling.yourdomain.com   CqCalling
-primerqc.yourdomain.com    PrimerQC
+hunglin-dev.com             Portfolio
+www.hunglin-dev.com         Portfolio
+health.hunglin-dev.com      Health Risk Assessment Report System
+cqcalling.hunglin-dev.com   CqCalling
+primerqc.hunglin-dev.com    PrimerQC
 ```
 
 ## 7. Required GitHub Secrets
@@ -152,10 +153,10 @@ Before automatic deployment can work, the Lightsail server must be prepared once
 5. Update `.env.production` with the real domain names used by Caddy:
 
 ```text
-PORTFOLIO_DOMAINS=yourdomain.com, www.yourdomain.com
-HEALTH_DOMAIN=health.yourdomain.com
-CQCALLING_DOMAIN=cqcalling.yourdomain.com
-PRIMERQC_DOMAIN=primerqc.yourdomain.com
+PORTFOLIO_DOMAINS=hunglin-dev.com, www.hunglin-dev.com
+HEALTH_DOMAIN=health.hunglin-dev.com
+CQCALLING_DOMAIN=cqcalling.hunglin-dev.com
+PRIMERQC_DOMAIN=primerqc.hunglin-dev.com
 ```
 
 6. Confirm the server firewall allows inbound TCP 80 and 443.

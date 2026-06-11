@@ -90,10 +90,11 @@ Production preparation files are included:
 The reverse proxy is designed for this deployment layout:
 
 ```text
-www.yourdomain.com        Portfolio
-health.yourdomain.com     Health Risk Assessment Report System
-cqcalling.yourdomain.com  CqCalling
-primerqc.yourdomain.com   PrimerQC
+hunglin-dev.com             Portfolio
+www.hunglin-dev.com         Portfolio
+health.hunglin-dev.com      Health Risk Assessment Report System
+cqcalling.hunglin-dev.com   CqCalling
+primerqc.hunglin-dev.com    PrimerQC
 ```
 
 The local Docker setup exposes each service through direct ports for development, while `infrastructure/caddy/Caddyfile` handles the production subdomain routing model and automatic HTTPS.
