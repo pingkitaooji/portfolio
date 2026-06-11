@@ -11,7 +11,7 @@ Use one Ubuntu server with Docker and Docker Compose:
 - CqCalling: `cqcalling.yourdomain.com`
 - PrimerQC: `primerqc.yourdomain.com`
 
-For AWS Lightsail, start with a 2GB instance. The stack runs three Django apps, one static portfolio, Nginx, and PostgreSQL.
+For AWS Lightsail, start with a 2GB instance. The stack runs three Django apps, one static portfolio, Caddy, and PostgreSQL.
 
 ## Files
 
@@ -21,7 +21,7 @@ For AWS Lightsail, start with a 2GB instance. The stack runs three Django apps, 
 | `docker-compose.prod.yml` | Production compose file using Gunicorn and no source bind mounts for Django apps. |
 | `.env.example` | Local development environment example. |
 | `.env.production.example` | Production environment template. Copy this to `.env.production` on the server. |
-| `infrastructure/nginx/default.conf` | Subdomain reverse proxy configuration. |
+| `infrastructure/caddy/Caddyfile` | Caddy reverse proxy configuration with automatic HTTPS. |
 
 ## Server Setup
 
@@ -54,15 +54,24 @@ cp .env.production.example .env.production
 - keep `DJANGO_DEMO_LOGIN_PREFILL=0`
 - keep `CREATE_DEMO_USERS=0` for public deployment
 
-8. Update `infrastructure/nginx/default.conf` and replace all `yourdomain.com` values with the real domain.
+8. Confirm the Caddy domain variables in `.env.production` use the real domain:
 
-9. Build and start:
+```text
+PORTFOLIO_DOMAINS=yourdomain.com, www.yourdomain.com
+HEALTH_DOMAIN=health.yourdomain.com
+CQCALLING_DOMAIN=cqcalling.yourdomain.com
+PRIMERQC_DOMAIN=primerqc.yourdomain.com
+```
+
+9. Confirm the server firewall allows inbound TCP 80 and 443.
+
+10. Build and start:
 
 ```bash
 docker compose -f docker-compose.prod.yml up -d --build
 ```
 
-10. Check service status and logs:
+11. Check service status and logs:
 
 ```bash
 docker compose -f docker-compose.prod.yml ps
@@ -73,15 +82,15 @@ docker compose -f docker-compose.prod.yml logs primerqc
 
 ## HTTPS
 
-The current production compose exposes HTTP through Nginx. Add HTTPS before sharing the site publicly.
+The production compose uses Caddy as the reverse proxy. Caddy listens on ports 80 and 443, redirects HTTP to HTTPS, and automatically obtains and renews Let's Encrypt certificates.
 
-Practical options:
+Before starting production, make sure:
 
-- Put AWS Lightsail Load Balancer in front and attach an SSL certificate.
-- Or install Certbot on the server and configure Nginx certificates.
-- Or replace the reverse proxy with Caddy for automatic Let's Encrypt certificates.
+- DNS A records for all domains point to the server Static IP.
+- Server firewall allows inbound TCP 80 and 443.
+- `.env.production` contains the real domain names.
 
-After HTTPS is working, set these values in `.env.production`:
+Keep these values enabled in `.env.production`:
 
 ```text
 DJANGO_SECURE_SSL_REDIRECT=1
@@ -109,7 +118,8 @@ Media volume backup should include the Docker volume named `media_data`, which s
 - Demo login pre-fill is disabled.
 - `CREATE_DEMO_USERS=0`.
 - DNS points to the server Static IP.
-- Nginx `server_name` values match the real domain.
+- Caddy domain variables in `.env.production` match the real domain.
+- Server firewall allows inbound TCP 80 and 443.
 - HTTPS is configured before sending the URL to others.
 - PostgreSQL and media backup process is documented.
 - No confidential CSV or private training data is committed.
