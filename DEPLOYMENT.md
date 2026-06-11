@@ -6,10 +6,10 @@ This project is ready to deploy as a single Docker Compose workspace on a VPS su
 
 Use one Ubuntu server with Docker and Docker Compose:
 
-- Portfolio: `www.yourdomain.com`
-- Health Risk Assessment Report System: `health.yourdomain.com`
-- CqCalling: `cqcalling.yourdomain.com`
-- PrimerQC: `primerqc.yourdomain.com`
+- Portfolio: `hunglin-dev.com` and `www.hunglin-dev.com`
+- Health Risk Assessment Report System: `health.hunglin-dev.com`
+- CqCalling: `cqcalling.hunglin-dev.com`
+- PrimerQC: `primerqc.hunglin-dev.com`
 
 For AWS Lightsail, start with a 2GB instance. The stack runs three Django apps, one static portfolio, Caddy, and PostgreSQL.
 
@@ -30,11 +30,11 @@ For AWS Lightsail, start with a 2GB instance. The stack runs three Django apps, 
 3. Point DNS records to the Static IP:
 
 ```text
-A     yourdomain.com          <STATIC_IP>
-A     www.yourdomain.com      <STATIC_IP>
-A     health.yourdomain.com   <STATIC_IP>
-A     cqcalling.yourdomain.com <STATIC_IP>
-A     primerqc.yourdomain.com <STATIC_IP>
+A     hunglin-dev.com           <STATIC_IP>
+A     www.hunglin-dev.com       <STATIC_IP>
+A     health.hunglin-dev.com    <STATIC_IP>
+A     cqcalling.hunglin-dev.com <STATIC_IP>
+A     primerqc.hunglin-dev.com  <STATIC_IP>
 ```
 
 4. Install Docker and Docker Compose on the server.
@@ -50,17 +50,17 @@ cp .env.production.example .env.production
 - set `DJANGO_SECRET_KEY`, `CQCALLING_SECRET_KEY`, and `PRIMERQC_SECRET_KEY`
 - set a strong `POSTGRES_PASSWORD`
 - set a strong `DJANGO_SUPERUSER_PASSWORD`
-- replace `yourdomain.com` with the real domain
+- confirm the `hunglin-dev.com` domain values are correct
 - keep `DJANGO_DEMO_LOGIN_PREFILL=0`
 - keep `CREATE_DEMO_USERS=0` for public deployment
 
 8. Confirm the Caddy domain variables in `.env.production` use the real domain:
 
 ```text
-PORTFOLIO_DOMAINS=yourdomain.com, www.yourdomain.com
-HEALTH_DOMAIN=health.yourdomain.com
-CQCALLING_DOMAIN=cqcalling.yourdomain.com
-PRIMERQC_DOMAIN=primerqc.yourdomain.com
+PORTFOLIO_DOMAINS=hunglin-dev.com, www.hunglin-dev.com
+HEALTH_DOMAIN=health.hunglin-dev.com
+CQCALLING_DOMAIN=cqcalling.hunglin-dev.com
+PRIMERQC_DOMAIN=primerqc.hunglin-dev.com
 ```
 
 9. Confirm the server firewall allows inbound TCP 80 and 443.
