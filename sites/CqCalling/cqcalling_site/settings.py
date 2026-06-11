@@ -10,7 +10,7 @@ ALLOWED_HOSTS = [
     host.strip()
     for host in os.getenv(
         "CQCALLING_ALLOWED_HOSTS",
-        "127.0.0.1,localhost,cqcalling.yourdomain.com",
+        "127.0.0.1,localhost,cqcalling.hunglin-dev.com",
     ).split(",")
     if host.strip()
 ]

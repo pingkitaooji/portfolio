@@ -10,7 +10,7 @@ ALLOWED_HOSTS = [
     host.strip()
     for host in os.getenv(
         "PRIMERQC_ALLOWED_HOSTS",
-        "127.0.0.1,localhost,primerqc.yourdomain.com",
+        "127.0.0.1,localhost,primerqc.hunglin-dev.com",
     ).split(",")
     if host.strip()
 ]
