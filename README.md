@@ -21,9 +21,11 @@ This repository is a Dockerized portfolio workspace that contains one portfolio 
 │   ├── CqCalling/       Django qPCR Cq calling demo
 │   └── PrimerQC/        Django primer prediction demo
 ├── infrastructure/
-│   └── nginx/           Reverse proxy configuration
+│   ├── caddy/           Production reverse proxy and HTTPS configuration
+│   └── nginx/           Legacy reverse proxy configuration
 ├── private_data/        Local-only confidential data, ignored by Git
 ├── docker-compose.yml
+├── docker-compose.prod.yml
 ├── .env.example
 └── README.md
 ```
@@ -32,7 +34,7 @@ This repository is a Dockerized portfolio workspace that contains one portfolio 
 
 - Backend: Python, Django, PHP/Laravel experience represented in portfolio skills
 - Data and algorithms: Python data processing, qPCR signal analysis, primer feature scoring, SNP workflow simulation
-- Deployment: Docker Compose, Gunicorn, Nginx, Linux, AWS-oriented deployment planning
+- Deployment: Docker Compose, Gunicorn, Caddy, Linux, AWS-oriented deployment planning
 - Database: PostgreSQL in Docker for the health-risk system; SQLite fallback for local standalone Django runs
 
 ## Local Run
@@ -79,7 +81,7 @@ The Health Risk login page can be pre-filled with `clinic_admin / demo123` for l
 
 Production preparation files are included:
 
-- `docker-compose.prod.yml` runs the Django apps with Gunicorn.
+- `docker-compose.prod.yml` runs the Django apps with Gunicorn and Caddy HTTPS.
 - `.env.production.example` lists the required production environment variables.
 - `DEPLOYMENT.md` contains the AWS Lightsail/VPS deployment and CI/CD checklist.
 
@@ -94,7 +96,7 @@ cqcalling.yourdomain.com  CqCalling
 primerqc.yourdomain.com   PrimerQC
 ```
 
-The local Docker setup exposes each service through direct ports for development, while `infrastructure/nginx/default.conf` documents the subdomain routing model.
+The local Docker setup exposes each service through direct ports for development, while `infrastructure/caddy/Caddyfile` handles the production subdomain routing model and automatic HTTPS.
 
 ## Data Safety
 
@@ -102,7 +104,7 @@ Confidential training data is not committed.
 
 - `private_data/` is ignored by Git.
 - The de-identified primer CSV is kept outside committed project paths.
-- `.env`, local databases, media uploads, logs, static build outputs, and cache files are ignored.
+- `.env`, `.env.production`, local databases, media uploads, logs, static build outputs, and cache files are ignored.
 - PrimerQC commits only the demo model artifact needed by the web app, not the source confidential CSV.
 
 ## Useful Commands

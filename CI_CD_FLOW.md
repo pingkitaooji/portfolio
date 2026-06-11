@@ -105,7 +105,7 @@ The production stack uses `docker-compose.prod.yml`.
 It starts:
 
 ```text
-reverse-proxy  Nginx reverse proxy
+reverse-proxy  Caddy reverse proxy with automatic HTTPS
 portfolio      static portfolio site
 web            Health Risk Django app with Gunicorn
 cqcalling      CqCalling Django app with Gunicorn
@@ -149,12 +149,20 @@ Before automatic deployment can work, the Lightsail server must be prepared once
 2. Clone the repository to `DEPLOY_PATH`.
 3. Create `.env.production` from `.env.production.example`.
 4. Replace all placeholder secrets and domain values.
-5. Update `infrastructure/nginx/default.conf` with the real domain names.
-6. Run the first deployment manually:
+5. Update `.env.production` with the real domain names used by Caddy:
+
+```text
+PORTFOLIO_DOMAINS=yourdomain.com, www.yourdomain.com
+HEALTH_DOMAIN=health.yourdomain.com
+CQCALLING_DOMAIN=cqcalling.yourdomain.com
+PRIMERQC_DOMAIN=primerqc.yourdomain.com
+```
+
+6. Confirm the server firewall allows inbound TCP 80 and 443.
+7. Run the first deployment manually:
 
 ```bash
 bash scripts/deploy.sh
 ```
 
 After the manual deployment works, GitHub Actions can handle future deployments.
-

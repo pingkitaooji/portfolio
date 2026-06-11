@@ -1,0 +1,25 @@
+{$PORTFOLIO_DOMAINS:yourdomain.com, www.yourdomain.com} {
+	reverse_proxy portfolio:80
+}
+
+{$HEALTH_DOMAIN:health.yourdomain.com} {
+	request_body {
+		max_size 30MB
+	}
+
+	handle_path /media/* {
+		root * /srv/health-media
+		header Cache-Control "private, no-store"
+		file_server
+	}
+
+	reverse_proxy web:8000
+}
+
+{$CQCALLING_DOMAIN:cqcalling.yourdomain.com} {
+	reverse_proxy cqcalling:8000
+}
+
+{$PRIMERQC_DOMAIN:primerqc.yourdomain.com} {
+	reverse_proxy primerqc:8000
+}
