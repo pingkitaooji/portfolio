@@ -22,7 +22,7 @@
           <a href="{% url 'snp_records' %}" class="{% if active_page == 'snp' %}active{% endif %}">SNP 資料</a>
           <a href="{% url 'report_list' %}" class="{% if active_page == 'reports' %}active{% endif %}">報告列表</a>
         </nav>
-        <a class="portfolio-link" href="http://127.0.0.1/">回到 Portfolio</a>
+        <a class="portfolio-link" href="https://www.hunglin-dev.com" data-local-url="http://127.0.0.1/">回到 Portfolio</a>
         <div class="operator-card">
           <span>帳戶</span>
           <strong>{{ request.user.username }}</strong>
